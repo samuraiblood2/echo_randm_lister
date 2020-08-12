@@ -33,7 +33,7 @@ function doSubmit() {
 	}
 
 	var count = 0;
-	var highest = Object.keys(choices).reduce(function(a, b) { return choices[a] > choices[b] ? a : b });
+	var highest = Object.keys(choices).reduce((a, b) => { return choices[a] > choices[b] ? a : b });
 
 	for (var key in choices) {
 		var value = choices[key];
