@@ -1,0 +1,6 @@
+<center>
+<h2>The musings of a bored fuck.</h2>
+<p>I was bored and tired of Random.org having a shitty random list thing, so I made my own.<br>
+Then I started dicking around with HTML/CSS/JS as I was becoming more and more bored.<br>
+This little program has now become my dumping ground for small shit that can be turned into a webapp.</p>
+</center>
