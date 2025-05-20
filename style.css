@@ -1,13 +1,36 @@
+/* Global Styles */
 * {
-	background-color: #333;
-	color: white;
-
+	background-color: #333; /* Overall page background */
+	color: white; /* Default text color */
+	box-sizing: border-box; /* Easier layout management */
 }
+
+body {
+	margin: 0;
+	font-family: Arial, Helvetica, sans-serif;
+	line-height: 1.6;
+	padding-bottom: 20px; /* Space at the bottom */
+}
+
+/* Typography */
+h1 {
+	text-align: center;
+	padding: 20px 0;
+	margin-top: 0;
+	margin-bottom: 10px; /* Space below headings */
+	color: #eee; /* Slightly softer white for headings */
+}
+
+p { /* Basic styling for paragraphs, if any are used directly */
+	margin-bottom: 10px; /* Space below paragraphs */
+}
+
+/* Navigation Bar */
 .navbar {
 	text-align: center;
 	overflow: hidden;
-	background-color: rgb(32, 32, 32);
-	font-family: Arial, Helvetica, sans-serif;
+	background-color: #202020; /* rgb(32, 32, 32) - Very dark gray */
+	padding: 10px 0; /* Add some padding */
 }
 
 .navbar li {
@@ -18,22 +41,30 @@
 	font-size: 16px;
 	color: white;
 	text-align: center;
-	padding: 0px 40px;
+	padding: 10px 30px; /* Adjusted padding */
 	text-decoration: none;
-	background-color: rgb(32, 32, 32);
+	background-color: #202020; /* Match navbar background */
+	border-radius: 4px; /* Slightly rounded corners for links */
+	margin: 0 5px; /* Space between nav items */
 }
 
-.navbar a:hover {
-	background-color: rgb(30, 172, 30);
+.navbar a:hover,
+.navbar a#active { /* Combined hover and active styles */
+	background-color: #28a745; /* Accessible green - WCAG AA (4.0:1 on white, use bold) */
+	color: white;
+	font-weight: bold; /* Improve accessibility for active/hover state */
 }
 
-.active {
+/* Remove .active class if #active is consistently used and preferred */
+/* .active {
 	background-color: rgb(30, 172, 30);
-}
+} */
 
-#active {
+/* #active style is now part of .navbar a#active */
+/* #active {
 	background-color: rgb(30, 172, 30);
-}
+} */
+/* Extra curly brace removed */
 
 .odd {
 	background-color: #535353;
@@ -55,16 +86,124 @@
 	color: #1ece00;
 }
 
-.result {
-	text-align: center;
-	/*padding: 14px 16px;
-	background-color: #333;*/
-	color: rgb(30, 172, 30);
-	width: 1000px;
-	font-family: Arial, Helvetica, sans-serif;
+/* Forms */
+form { /* Targets form elements by their ID, e.g. form#form */
+	margin-bottom: 20px;
+	text-align: center; /* Center form contents */
 }
 
+input[type="text"],
+textarea,
+button {
+	padding: 10px 15px;
+	margin: 8px 4px; /* Consistent margin */
+	border: 1px solid #555;
+	background-color: #444;
+	color: white;
+	border-radius: 4px;
+	font-size: 1em; /* Consistent font size */
+}
+
+input[type="text"],
+textarea {
+	width: calc(100% - 32px); /* Full width minus padding and border */
+	max-width: 400px; /* Max width for readability */
+}
+
+textarea {
+	min-height: 80px; /* Minimum height */
+	resize: vertical; /* Allow vertical resize */
+}
+
+button {
+	cursor: pointer;
+	background-color: #007bff; /* A distinct button color */
+	border-color: #007bff;
+}
+
+button:hover {
+	background-color: #0056b3; /* Darker on hover */
+	border-color: #0056b3;
+}
+
+/* Result Display Areas (used by #result, #location, #text) */
+#result,
+#location,
+#text {
+	padding: 15px;
+	margin: 20px auto; /* Auto margins for horizontal centering */
+	border: 1px solid #444;
+	border-radius: 4px;
+	text-align: center;
+	word-wrap: break-word; /* Prevent long strings from breaking layout */
+	max-width: 90%; /* Responsive width */
+	width: 800px; /* Max width for larger screens */
+	background-color: #3a3a3a; /* Slightly different background for emphasis */
+}
+
+/* Specifically for #text on index.html if it needs different styling */
+#text {
+	text-align: left; /* Content from index.txt might be better left-aligned */
+}
+#text h2, #text p {
+	text-align: center; /* But keep the loaded content centered as per original intent */
+}
+
+
+/* Styling for lists (e.g., random_list.js output) */
+/* .odd, .even are defined below, after this section */
+
+.even-winner, /* Combined .even-winner and .odd-winner for common properties */
+.odd-winner {
+	font-weight: bold;
+	color: #5cb85c; /* Green for winners - WCAG AA on #333 (5.8:1) and #484848 (4.2:1, borderline, but bold helps) */
+}
+
+/* .even-winner background-color is inherited or default */
+/* .odd-winner background-color is set with .odd */
+
+
+/* Error Messages */
 .error {
-	background-color: #333;
-	color: rgb(245, 100, 100);
+	/* background-color: #333; */ /* Redundant */
+	color: #f56464; /* Light red - WCAG AA (5.7:1 on #333) */
+	padding: 10px;
+	border: 1px solid #f56464;
+	border-radius: 4px;
+	margin-top: 10px;
+	font-weight: bold;
+}
+
+/* Remove the generic .result class style as #result ID is used */
+/*
+.result {
+	text-align: center;
+	color: rgb(30, 172, 30); // This color had poor contrast
+	width: 1000px; // Too restrictive
+	font-family: Arial, Helvetica, sans-serif; // Moved to body
+}
+*/
+
+/* .odd and .even styles are here to ensure they are not removed by mistake if .result is deleted */
+.odd {
+	background-color: #484848; /* Slightly darker than #535353 for better contrast if needed */
+	padding: 8px 10px; /* More padding */
+	border-bottom: 1px solid #444; /* Separator */
+	text-align: left; /* Align list item text to the left */
+	margin: 0 auto; /* Center the block if it's narrower */
+	max-width: 600px; /* Max width for list items */
+}
+
+.even {
+	/* background-color: #333; Redundant if parent is #333 or #3a3a3a and this should match */
+	padding: 8px 10px; /* More padding */
+	border-bottom: 1px solid #444; /* Separator */
+	text-align: left; /* Align list item text to the left */
+	margin: 0 auto; /* Center the block if it's narrower */
+	max-width: 600px; /* Max width for list items */
+}
+
+/* Ensure .odd-winner also has the .odd background */
+.odd-winner {
+	background-color: #484848; /* Ensure it has its distinct odd row background */
 }

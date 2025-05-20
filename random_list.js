@@ -1,83 +1,119 @@
-var choices = [];
+// Stores the list of items and their selection counts.
+// Using an object to map item names to counts.
+let itemList = {};
 
-function doSubmit() {
+// Main function to generate and display the randomized list.
+function generateRandomList() {
+	// Clear previous results and reset the item list.
+	resetForm();
 
-	// XXX: Make sure the result element is empty.
-	clearResult()
+	// Populate the item list from the textarea.
+	if (!initializeItemList()) {
+		return; // Stop if initialization fails (e.g., no items entered).
+	}
 
-	// XXX: Popualte our hashtable with stuff and things.
-	if (!populateList()) {
+	// Get the number of random selections to make.
+	// Using getElement from utils.js to get the input element
+	const amountInputElement = getElement('amount');
+	if (!amountInputElement) return; // Stop if amount input not found
+	const numberOfSelections = parseInt(amountInputElement.value, 10);
+
+	// Validate the number of selections.
+	if (isNaN(numberOfSelections)) {
+		displayError('result', "Please enter a valid number for the amount.");
+		return;
+	}
+	if (numberOfSelections <= 0) {
+		displayError('result', "Please enter an amount greater than 0.");
 		return;
 	}
 
-	// XXX: Do stuff.
-	var amount = document.getElementById('amount').value;
-	if (amount <= 0) {
-		printError("Amount must be above 1.");
+	const itemNames = Object.keys(itemList);
+	const numberOfItems = itemNames.length;
+
+	if (numberOfItems === 0) {
+		// This error case should ideally be caught by initializeItemList,
+		// but as a safeguard or if initializeItemList changes.
+		displayError('result', "No items available to select from. Please check your input.");
 		return;
 	}
 
-	if (isNaN(amount)) {
-		printError("Amount must be a number.");
-		return;
+	// Randomly select items and increment their counts.
+	for (let i = 0; i < numberOfSelections; i++) {
+		const randomIndex = Math.floor(Math.random() * numberOfItems);
+		const selectedItemName = itemNames[randomIndex];
+		itemList[selectedItemName]++;
 	}
 
-
-	var keys = Object.keys(choices);
-	var length = keys.length;
-
-	for (var i = 0; i < amount; i ++) {
-		var randIndex = Math.floor(Math.random() * length);
-		var key = keys[randIndex];
-		choices[key] += 1;
+	// Determine the item with the highest count.
+	let highestCount = -1;
+	let winningItemName = "";
+	for (const itemName in itemList) {
+		if (itemList[itemName] > highestCount) {
+			highestCount = itemList[itemName];
+			winningItemName = itemName;
+		}
 	}
 
-	var count = 0;
-	var highest = Object.keys(choices).reduce((a, b) => { return choices[a] > choices[b] ? a : b });
+	// Display the results.
+	let rowIndex = 0;
+	for (const itemName in itemList) {
+		const itemCount = itemList[itemName];
+		const isEvenRow = (rowIndex % 2 === 0);
+		const isHighestCountItem = (itemName === winningItemName);
 
-	for (var key in choices) {
-		var value = choices[key];
-		var isEven = (count % 2 == 0);
-		var isWinner = (key == highest);
-
-		var classText = (isWinner ? (isEven ? 'even-winner' : 'odd-winner') : (isEven ? 'even' : 'odd'));
-
-		printResult('<div class=' + classText + '>' + key + ': ' + value + '</div>');
-
-		count ++;
+		// Determine the CSS class for styling based on row index and whether it's the "winner".
+		let rowClass = isEvenRow ? 'even' : 'odd';
+		if (isHighestCountItem) {
+			rowClass = isEvenRow ? 'even-winner' : 'odd-winner';
+		}
+		// Using appendToElement from utils.js
+		appendToElement('result', `<div class="${rowClass}">${itemName}: ${itemCount}</div>`);
+		rowIndex++;
 	}
 }
 
-function populateList() {
-	var textarea = document.getElementById('items');
-	if (textarea == null) {
+// Initializes the itemList from the text area input.
+function initializeItemList() {
+	// Using getElement from utils.js to get the textarea
+	const itemsTextarea = getElement('items');
+	if (!itemsTextarea) {
+		// If textarea isn't found, cannot proceed. Error logged by getElement.
+		// We might want to display an error in 'result' as well for user visibility.
+		displayError('result', "Error: Textarea element for items not found. Cannot initialize list.");
 		return false;
 	}
 
-	if (textarea.value == "") {
-		printError("No items were entered.");
+	const itemEntriesText = itemsTextarea.value.trim();
+	if (itemEntriesText === "") {
+		displayError('result', "Please enter at least one item in the text area.");
 		return false;
 	}
 
-	var values = textarea.value.split('\n');
-	for (var i = 0; i < values.length; i ++) {
-		choices[values[i]] = 0;
+	const itemEntries = itemEntriesText.split('\n');
+	itemList = {}; // Reset item list before populating
+	for (let i = 0; i < itemEntries.length; i++) {
+		const trimmedItemName = itemEntries[i].trim();
+		if (trimmedItemName !== "") { // Avoid adding empty strings as items
+			itemList[trimmedItemName] = 0; // Initialize count to 0
+		}
+	}
+	if (Object.keys(itemList).length === 0) {
+		displayError('result', "No valid items entered. Please ensure each line has text.");
+		return false;
 	}
 	return true;
 }
 
-function printResult(s) {
-	var result = document.getElementById('result');
-	result.innerHTML += s;
+// Clears the result area using utils.js and resets the global item list.
+function resetForm() {
+	clearElement('result'); // Using clearElement from utils.js
+	itemList = {}; // Reset the global item list. This logic remains specific to random_list.js
 }
 
-function printError(s) {
-	printResult('<div class="error">' + s + '</div>');
-}
-
-function clearResult() {
-	var result = document.getElementById('result');
-	result.innerHTML = '';
-
-	choices = [];
-}
+// Local displayResult and displayError functions are removed
+// as they are now handled by utils.js:
+// appendToElement(elementId, htmlContent)
+// displayError(elementId, errorMessage)
+// clearElement(elementId)
+// getElement(elementId)

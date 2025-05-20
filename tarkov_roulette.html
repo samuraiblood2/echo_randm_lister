@@ -1,34 +1,34 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 	<head>
-		<title>Random Number</title>
-
+		<title>Tarkov Roulette</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link rel="stylesheet" type="text/css" href="style.css" />
-		<script type="text/javascript" src="tarkov_roulette.js"> </script>
+		<script type="text/javascript" src="utils.js"></script>
+		<script type="text/javascript" src="tarkov_roulette.js"></script>
 		<noscript>JavaScript needs to be enabled to run this program.</noscript>
-
-		<nav>
-			<ul class="navbar">
-				<li><a href="./index.html">Home</a></li>
-				<li><a href="./random_list.html">Random Lister</a></li>
-				<li><a href="./random_number.html">Random Number</a></li>
-				<li><a href="./coin_flipper.html">Coin Flipper</a></li>
-				<li><a id="active" href="./tarkov_roulette.html">Tarkov Roulette</a></li>
-			</ul>
-		</nav>
 	</head>
 
 	<body>
+		<div id="nav-placeholder"></div>
 		<center>
-			<br>Scav or PMC?<br><br>
+			<h1>Tarkov Roulette</h1>
+			Scav or PMC?<br><br>
 			<form id="form">
-				<input type="button" onclick="doOption('Scav')" value="Scav">
-				<input type="button" onclick="doOption('Random')" value="Random">
-				<input type="button" onclick="doOption('PMC')" value="PMC">
+				<button type="button" onclick="doOption('Scav')">Scav</button>
+				<button type="button" onclick="doOption('Random')">Random</button>
+				<button type="button" onclick="doOption('PMC')">PMC</button>
 			</form>
 
-			<center><div id="result"></div></center>
-
-			<center><div id="location"></div></center>
+			<div id="result"></div>
+			<div id="location"></div>
 		</center>
+
+		<script>
+			document.addEventListener('DOMContentLoaded', function() {
+				loadNavigationMenu('./tarkov_roulette.html');
+			});
+		</script>
 	</body>
 </html>

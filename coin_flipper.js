@@ -1,28 +1,27 @@
-var count = 0;
+// Initialize flip count
+let flipCount = 0;
 
-function doCoinFlip() {
-	clearResult();
+// Function to handle the coin flip logic
+function flipCoin() {
+	// Clear previous result using utility function
+	clearElement('result');
 
-	var rand = Math.random();
-	var adjusted = Math.round(rand);
-	var headsOrTails = (adjusted == 1 ? 'Heads' : 'Tails');
+	// Generate a random number between 0 and 1
+	const randomNumber = Math.random();
+	// Determine coin face based on the random number
+	const coinFace = (randomNumber < 0.5 ? 'Heads' : 'Tails');
 
-	count ++;
-	printResult('Count: ' + count);
+	// Increment flip count
+	flipCount++;
+	// Display the current flip count using utility function
+	appendToElement('result', 'Count: ' + flipCount + '<br>'); // Added <br> for spacing if multiple messages are appended
 
-	printResult('<h1 style="font-size:60px;"><strong>' + headsOrTails + '</strong></h1>');
+	// Display the coin face using utility function
+	appendToElement('result', '<h1 style="font-size:60px;"><strong>' + coinFace + '</strong></h1>');
 }
 
-function printResult(s) {
-	var result = document.getElementById('result');
-	result.innerHTML += s;
-}
-
-function printError(s) {
-	printResult('<div class="error">' + s + '</div>');
-}
-
-function clearResult() {
-	var result = document.getElementById('result');
-	result.innerHTML = '';
-}
+// Local displayResult, displayError, and clearPreviousResult functions are removed
+// as they are now handled by utils.js:
+// appendToElement(elementId, htmlContent)
+// displayError(elementId, errorMessage)
+// clearElement(elementId)

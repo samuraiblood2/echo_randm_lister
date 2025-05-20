@@ -1,27 +1,48 @@
-const localTextFile = ("./index.txt");
+// Defines the path to the text file that contains the content to be loaded.
+const CONTENT_FILE_PATH = "./index.txt";
 
+// Main function, executed when the body of index.html loads.
 function main() {
-	readFile(localTextFile);
+	// Fetches and displays the content from the specified file.
+	fetchAndDisplayContent(CONTENT_FILE_PATH);
 }
 
-function readFile(file) {
-	var request = new XMLHttpRequest();
+// Fetches content from the given file path and displays it using utility functions.
+function fetchAndDisplayContent(filePath) {
+	const httpRequest = new XMLHttpRequest();
 
-	request.open("GET", file);
-	request.responseType = "text";
-	request.withCredentials = true;
+	httpRequest.open("GET", filePath, true); // true for asynchronous
+	httpRequest.responseType = "text";
+	// withCredentials is not typically needed for local file requests but left for now.
+	httpRequest.withCredentials = true;
 
-	request.onreadystatechange = function() {
-		if (request.readyState == 4 && request.status == 200) {
-			print(request.responseText);
+	httpRequest.onreadystatechange = function() {
+		// Check if the request is complete.
+		if (httpRequest.readyState === XMLHttpRequest.DONE) {
+			// Check if the request was successful (status 200).
+			if (httpRequest.status === 200) {
+				// Using appendToElement from utils.js
+				appendToElement('text', httpRequest.responseText);
+			} else {
+				// Handle common errors like file not found.
+				console.error(`Error fetching file: ${filePath}. Status: ${httpRequest.status}`);
+				// Using appendToElement from utils.js to display the error message
+				appendToElement('text', `<p class="error">Error: Could not load content from ${filePath}. Status: ${httpRequest.status}</p>`);
+			}
 		}
-	}
+	};
 
-	request.send();
+	httpRequest.onerror = function() {
+		// Handle network errors or other issues that prevent the request from completing.
+		console.error(`Network error or issue fetching file: ${filePath}`);
+		// Using appendToElement from utils.js to display the error message
+		appendToElement('text', `<p class="error">Error: A network problem occurred while trying to load content from ${filePath}.</p>`);
+	};
+
+	httpRequest.send();
 }
 
-function print(s) {
-	var body = document.getElementById('text');
-	body.innerHTML += s;
-}
+// Local displayContent function is removed as its functionality
+// is replaced by appendToElement(elementId, htmlContent) from utils.js.
+// The error logging for missing element is handled by getElement in utils.js.
 

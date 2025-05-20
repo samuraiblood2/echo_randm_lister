@@ -1,33 +1,34 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 	<head>
 		<title>Random Number</title>
-
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link rel="stylesheet" type="text/css" href="style.css" />
-		<script type="text/javascript" src="random_number.js"> </script>
+		<script type="text/javascript" src="utils.js"></script>
+		<script type="text/javascript" src="random_number.js"></script>
 		<noscript>JavaScript needs to be enabled to run this program.</noscript>
-
-		<nav>
-			<ul class="navbar">
-				<li><a href="./index.html">Home</a></li>
-				<li><a href="./random_list.html">Random Lister</a></li>
-				<li><a id="active" href="./random_number.html">Random Number</a></li>
-				<li><a href="./coin_flipper.html">Coin Flipper</a></li>
-				<li><a href="./tarkov_roulette.html">Tarkov Roulette</a></li>
-			</ul>
-		</nav>
 	</head>
 
 	<body>
+		<div id="nav-placeholder"></div>
 		<center>
-			<br>Enter the range of numbers (ie 1 to 100) and the number of iterations.<br><br>
+			<h1>Random Number Generator</h1>
+			Enter the range of numbers (ie 1 to 100) and the number of iterations.<br><br>
 
-			<from id="form">
+			<form id="form">
 				Range: <input type="text" id="from"> to <input type="text" id="to"> <br> <br>
 				Amount: <input type="text" id="amount">
-				<input type="button" onclick="doSubmit()" value="Submit">
-			</from>
+				<button type="button" onclick="generateRandomNumbers()">Submit</button>
+			</form>
 
 			<br><br><div class="result" id="result"></div>
 		</center>
+
+		<script>
+			document.addEventListener('DOMContentLoaded', function() {
+				loadNavigationMenu('./random_number.html');
+			});
+		</script>
 	</body>
 </html>

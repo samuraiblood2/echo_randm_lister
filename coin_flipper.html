@@ -1,28 +1,29 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 	<head>
 		<title>Coin Flipper</title>
-
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link rel="stylesheet" type="text/css" href="style.css" />
-		<script type="text/javascript" src="coin_flipper.js"> </script>
+		<script type="text/javascript" src="utils.js"></script>
+		<script type="text/javascript" src="coin_flipper.js"></script>
 		<noscript>JavaScript needs to be enabled to run this program.</noscript>
-
-		<nav>
-			<ul class="navbar">
-				<li><a href="./index.html">Home</a></li>
-				<li><a href="./random_list.html">Random Lister</a></li>
-				<li><a href="./random_number.html">Random Number</a></li>
-				<li><a id="active" href="./coin_flipper.html">Coin Flipper</a></li>
-				<li><a href="./tarkov_roulette.html">Tarkov Roulette</a></li>
-			</ul>
-		</nav>
 	</head>
 
 	<body>
+		<div id="nav-placeholder"></div>
 		<center>
+			<h1>Coin Flipper</h1>
 			<form id="form">
-				<input type="button" onclick="doCoinFlip()" value="Flip Coin">
+				<button type="button" onclick="flipCoin()">Flip Coin</button>
 			</form>
 
 		<div id="result"></div></center>
+
+		<script>
+			document.addEventListener('DOMContentLoaded', function() {
+				loadNavigationMenu('./coin_flipper.html');
+			});
+		</script>
 	</body>
 </html>

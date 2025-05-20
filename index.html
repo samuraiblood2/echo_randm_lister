@@ -1,30 +1,26 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 	<head>
 		<title>Main</title>
-
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link rel="stylesheet" type="text/css" href="style.css" />
-		<script type="text/javascript" src="main.js"> </script>
+		<script type="text/javascript" src="utils.js"></script>
+		<script type="text/javascript" src="main.js"></script>
 		<noscript>JavaScript needs to be enabled to run this program.</noscript>
-
-		<nav>
-			<ul class="navbar">
-				<li><a id="active" href="./index.html">Home</a></li>
-				<li><a href="./random_list.html">Random Lister</a></li>
-				<li><a href="./random_number.html">Random Number</a></li>
-				<li><a href="./coin_flipper.html">Coin Flipper</a></li>
-				<li><a href="./tarkov_roulette.html">Tarkov Roulette</a></li>
-			</ul>
-		</nav>
 	</head>
 
-	<body onload="javascript:main()">
+	<body>
+		<div id="nav-placeholder"></div>
 		<div id="text">
-
+			<h1>Home Page</h1>
 		</div>
 
-		<!--<center>
-			<h3>The musings of a bored fuck.</h3>
-			<p>I was bored and tired of Random.org having a shitty random list thing, so I made my own.</p>
-		</center>!-->
+		<script>
+			document.addEventListener('DOMContentLoaded', function() {
+				loadNavigationMenu('./index.html');
+				main(); // Call main function from main.js
+			});
+		</script>
 	</body>
 </html>
