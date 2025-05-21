@@ -1,48 +1,57 @@
-// Defines the path to the text file that contains the content to be loaded.
-const CONTENT_FILE_PATH = "./index.txt";
+// main.js - Logic for index.html, primarily to load and display the configured RSS feed.
 
-// Main function, executed when the body of index.html loads.
+// Functions used from other files:
+// - utils.js: getElement, setElementHTML
+// - settings.js: getSetting
+// - rss_reader.js: fetchRSS, parseRSS, displayRSSFeed
+
 function main() {
-	// Fetches and displays the content from the specified file.
-	fetchAndDisplayContent(CONTENT_FILE_PATH);
+    const textContainerId = 'text'; // ID of the div where content will be displayed
+    const rssFeedUrl = getSetting('rssFeedUrl'); // From settings.js
+
+    // Clear the <h1>Home Page</h1> placeholder first
+    // Note: displayRSSFeed also clears its container, but this handles the initial state.
+    const textContainer = getElement(textContainerId);
+    if (textContainer) {
+        // Instead of clearing everything, let's remove the initial H1 if the feed is to be loaded.
+        // Or, if no feed, we update the content.
+        // For now, let's clear it to make way for feed or messages.
+        // The <h1>Home Page</h1> was in index.html, not loaded by JS.
+        // So, if we want to replace it, we use setElementHTML.
+        // If we are *adding* to it, we use appendToElement.
+        // The task implies replacing the content of div#text.
+    } else {
+        console.error(`Container element with ID '${textContainerId}' not found. Cannot display RSS feed or messages.`);
+        return; // Stop if the main container is missing
+    }
+
+
+    if (!rssFeedUrl || rssFeedUrl.trim() === "") {
+        setElementHTML(textContainerId, '<p>RSS Feed URL not configured. Please set it in the <a href="./settings.html">Settings</a> page.</p>');
+    } else {
+        // Display a loading message while fetching
+        setElementHTML(textContainerId, '<p>Loading RSS feed...</p>');
+
+        fetchRSS(rssFeedUrl, function(error, xmlData) {
+            if (error) {
+                console.error("Error fetching RSS feed:", error);
+                setElementHTML(textContainerId, `<p class="error">Error fetching RSS feed: ${error.message}. Check the URL or try again later. Ensure the feed supports CORS if it's from a different domain.</p>`);
+            } else if (xmlData) {
+                const items = parseRSS(xmlData); // From rss_reader.js
+                if (!items || items.length === 0) {
+                    // parseRSS returns [] on error or if no items.
+                    setElementHTML(textContainerId, '<p class="error">Error parsing RSS feed or the feed is empty.</p>');
+                } else {
+                    // displayRSSFeed will clear the container before adding items.
+                    displayRSSFeed(items, textContainerId); // From rss_reader.js
+                }
+            } else {
+                // Should not happen if error is null, but as a safeguard
+                setElementHTML(textContainerId, '<p class="error">Unknown error occurred while fetching RSS feed.</p>');
+            }
+        });
+    }
 }
 
-// Fetches content from the given file path and displays it using utility functions.
-function fetchAndDisplayContent(filePath) {
-	const httpRequest = new XMLHttpRequest();
-
-	httpRequest.open("GET", filePath, true); // true for asynchronous
-	httpRequest.responseType = "text";
-	// withCredentials is not typically needed for local file requests but left for now.
-	httpRequest.withCredentials = true;
-
-	httpRequest.onreadystatechange = function() {
-		// Check if the request is complete.
-		if (httpRequest.readyState === XMLHttpRequest.DONE) {
-			// Check if the request was successful (status 200).
-			if (httpRequest.status === 200) {
-				// Using appendToElement from utils.js
-				appendToElement('text', httpRequest.responseText);
-			} else {
-				// Handle common errors like file not found.
-				console.error(`Error fetching file: ${filePath}. Status: ${httpRequest.status}`);
-				// Using appendToElement from utils.js to display the error message
-				appendToElement('text', `<p class="error">Error: Could not load content from ${filePath}. Status: ${httpRequest.status}</p>`);
-			}
-		}
-	};
-
-	httpRequest.onerror = function() {
-		// Handle network errors or other issues that prevent the request from completing.
-		console.error(`Network error or issue fetching file: ${filePath}`);
-		// Using appendToElement from utils.js to display the error message
-		appendToElement('text', `<p class="error">Error: A network problem occurred while trying to load content from ${filePath}.</p>`);
-	};
-
-	httpRequest.send();
-}
-
-// Local displayContent function is removed as its functionality
-// is replaced by appendToElement(elementId, htmlContent) from utils.js.
-// The error logging for missing element is handled by getElement in utils.js.
+// The old fetchAndDisplayContent function and CONTENT_FILE_PATH constant are removed.
 

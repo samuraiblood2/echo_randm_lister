@@ -6,6 +6,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link rel="stylesheet" type="text/css" href="style.css" />
 		<script type="text/javascript" src="utils.js"></script>
+		<script type="text/javascript" src="marquee.js"></script>
 		<script type="text/javascript" src="random_number.js"></script>
 		<noscript>JavaScript needs to be enabled to run this program.</noscript>
 	</head>
@@ -27,6 +28,8 @@
 
 		<script>
 			document.addEventListener('DOMContentLoaded', function() {
+				loadMarquee(); // Creates the marquee structure
+				// marquee.js's own DOMContentLoaded will call updateMarqueeDisplay()
 				loadNavigationMenu('./random_number.html');
 			});
 		</script>

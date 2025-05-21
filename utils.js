@@ -114,3 +114,31 @@ function loadNavigationMenu(activePageUrl) {
 
 	xhr.send();
 }
+
+/**
+ * Creates and prepends a marquee element to the document body.
+ * The marquee will have an ID 'motd-marquee-container' and class 'marquee-container'.
+ * It will contain a child div with class 'marquee-content' with initial placeholder text.
+ */
+function loadMarquee() {
+	if (!document.body) {
+		console.error("Cannot load marquee: document.body is not available.");
+		return;
+	}
+
+	// Create the main container for the marquee
+	const marqueeContainer = document.createElement('div');
+	marqueeContainer.id = 'motd-marquee-container';
+	marqueeContainer.className = 'marquee-container';
+
+	// Create the content div that will scroll or display text
+	const marqueeContent = document.createElement('div');
+	marqueeContent.className = 'marquee-content';
+	marqueeContent.textContent = "Welcome to the Utilities Hub! More features coming soon!"; // Engaging placeholder text
+
+	// Append the content to the container
+	marqueeContainer.appendChild(marqueeContent);
+
+	// Prepend the marquee container to the body
+	document.body.prepend(marqueeContainer);
+}

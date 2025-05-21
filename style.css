@@ -1,15 +1,41 @@
+:root {
+    /* Updated Default Theme */
+    --font-family-primary: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    --primary-bg-color: #2c2f33;
+    --secondary-bg-color: #36393f;
+    --navbar-bg-color: #23272a;
+    --text-color: #e0e0e0;
+    --heading-text-color: #ffffff;
+    --link-color: #7289da;
+    --nav-link-color: #e0e0e0;
+    --nav-active-bg-color: #7289da; /* Used for text and border of active nav link */
+    --button-bg-color: #7289da;
+    --button-hover-bg-color: #5b6eae;
+    --error-text-color: #f04747;
+    --success-text-color: #43b581;
+    --winner-text-color: #43b581; /* Consistent with success */
+    --border-color-light: #4f545c;
+    --border-color-medium: #40444b; /* For input field borders */
+    --marquee-bg-color: #23272a;
+    --marquee-text-color: #b0b0b0;
+    
+    --base-font-size: 16px;
+}
+
 /* Global Styles */
 * {
-	background-color: #333; /* Overall page background */
-	color: white; /* Default text color */
-	box-sizing: border-box; /* Easier layout management */
+	background-color: var(--primary-bg-color);
+	color: var(--text-color);
+	box-sizing: border-box;
 }
 
 body {
 	margin: 0;
-	font-family: Arial, Helvetica, sans-serif;
+	font-family: var(--font-family-primary);
 	line-height: 1.6;
-	padding-bottom: 20px; /* Space at the bottom */
+	padding-bottom: 20px;
+	padding-top: 40px; /* Space for fixed marquee */
+    font-size: var(--base-font-size);
 }
 
 /* Typography */
@@ -17,20 +43,27 @@ h1 {
 	text-align: center;
 	padding: 20px 0;
 	margin-top: 0;
-	margin-bottom: 10px; /* Space below headings */
-	color: #eee; /* Slightly softer white for headings */
+	margin-bottom: 10px;
+	color: var(--heading-text-color);
 }
 
-p { /* Basic styling for paragraphs, if any are used directly */
-	margin-bottom: 10px; /* Space below paragraphs */
+p {
+	margin-bottom: 10px;
+}
+a { /* General link styling */
+    color: var(--link-color);
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
 }
 
 /* Navigation Bar */
 .navbar {
 	text-align: center;
 	overflow: hidden;
-	background-color: #202020; /* rgb(32, 32, 32) - Very dark gray */
-	padding: 10px 0; /* Add some padding */
+	background-color: var(--navbar-bg-color);
+	padding: 10px 0;
 }
 
 .navbar li {
@@ -38,172 +71,234 @@ p { /* Basic styling for paragraphs, if any are used directly */
 }
 
 .navbar a {
-	font-size: 16px;
-	color: white;
+	font-size: var(--base-font-size);
+	color: var(--nav-link-color);
 	text-align: center;
-	padding: 10px 30px; /* Adjusted padding */
+	padding: 10px 15px;
 	text-decoration: none;
-	background-color: #202020; /* Match navbar background */
-	border-radius: 4px; /* Slightly rounded corners for links */
-	margin: 0 5px; /* Space between nav items */
+	background-color: var(--navbar-bg-color);
+	margin: 0 2px;
+	border-bottom: 3px solid transparent;
 }
 
 .navbar a:hover,
-.navbar a#active { /* Combined hover and active styles */
-	background-color: #28a745; /* Accessible green - WCAG AA (4.0:1 on white, use bold) */
-	color: white;
-	font-weight: bold; /* Improve accessibility for active/hover state */
+.navbar a#active {
+	background-color: transparent;
+	color: var(--nav-active-bg-color);
+	font-weight: bold;
+	border-bottom: 3px solid var(--nav-active-bg-color);
 }
 
-/* Remove .active class if #active is consistently used and preferred */
-/* .active {
-	background-color: rgb(30, 172, 30);
-} */
-
-/* #active style is now part of .navbar a#active */
-/* #active {
-	background-color: rgb(30, 172, 30);
-} */
-/* Extra curly brace removed */
-
-.odd {
-	background-color: #535353;
+/* Old .odd, .even, .winner styles - these might be superseded by refactored list styles below */
+/* For safety, keeping them commented or to be removed if truly unused by tarkov_roulette.js directly */
+/*
+.odd { 
+	background-color: #535353; 
 	padding: 2px 4px;
 }
-
-.even {
-	background-color: #333;
+.even { 
+	background-color: var(--primary-bg-color); 
 	padding: 2px 4px;
 }
-
-.even-winner {
-	background-color: #333;
-	color: #1ece00;
+.even-winner { 
+	background-color: var(--primary-bg-color); 
+	color: var(--winner-text-color);
 }
-
-.odd-winner {
-	background-color: #535353;
-	color: #1ece00;
+.odd-winner { 
+	background-color: #535353; 
+	color: var(--winner-text-color);
 }
+*/
 
 /* Forms */
-form { /* Targets form elements by their ID, e.g. form#form */
+form {
 	margin-bottom: 20px;
-	text-align: center; /* Center form contents */
+	text-align: center;
 }
 
 input[type="text"],
 textarea,
-button {
-	padding: 10px 15px;
-	margin: 8px 4px; /* Consistent margin */
-	border: 1px solid #555;
-	background-color: #444;
-	color: white;
-	border-radius: 4px;
-	font-size: 1em; /* Consistent font size */
+select { /* Added select here */
+	padding: 10px;
+	margin: 8px 4px;
+	border: 1px solid var(--border-color-medium);
+	background-color: var(--primary-bg-color); /* Darker background for inputs */
+	color: var(--text-color);
+	border-radius: 5px;
+	font-size: 1em;
+    font-family: var(--font-family-primary); /* Ensure form elements inherit font */
 }
+select { /* Specific styling for select padding if needed */
+    padding-right: 30px; /* Space for dropdown arrow */
+}
+
 
 input[type="text"],
 textarea {
-	width: calc(100% - 32px); /* Full width minus padding and border */
-	max-width: 400px; /* Max width for readability */
+	width: calc(100% - 32px);
+	max-width: 400px;
 }
 
 textarea {
-	min-height: 80px; /* Minimum height */
-	resize: vertical; /* Allow vertical resize */
+	min-height: 80px;
+	resize: vertical;
 }
 
 button {
 	cursor: pointer;
-	background-color: #007bff; /* A distinct button color */
-	border-color: #007bff;
+	background-color: var(--button-bg-color); 
+	border: none; /* Flatter look */
+    color: var(--heading-text-color); /* Ensure good contrast on button */
+	padding: 10px 18px; /* Adjusted padding */
+	border-radius: 5px; /* Slightly more rounded */
+	font-weight: bold;
+    font-family: var(--font-family-primary);
+	transition: background-color 0.2s ease-in-out;
 }
 
 button:hover {
-	background-color: #0056b3; /* Darker on hover */
-	border-color: #0056b3;
+	background-color: var(--button-hover-bg-color); 
 }
 
-/* Result Display Areas (used by #result, #location, #text) */
+/* Result Display Areas & Page Containers */
+.page-container, /* Added for settings page */
 #result,
 #location,
 #text {
-	padding: 15px;
-	margin: 20px auto; /* Auto margins for horizontal centering */
-	border: 1px solid #444;
-	border-radius: 4px;
+	padding: 20px; /* Increased padding */
+	margin: 20px auto;
+	border: 1px solid var(--border-color-light); /* Subtle border */
+	border-radius: 5px; /* Consistent rounding */
 	text-align: center;
-	word-wrap: break-word; /* Prevent long strings from breaking layout */
-	max-width: 90%; /* Responsive width */
+	word-wrap: break-word;
+	max-width: 90%;
 	width: 800px; /* Max width for larger screens */
-	background-color: #3a3a3a; /* Slightly different background for emphasis */
+	background-color: var(--secondary-bg-color);
+    /* box-shadow: 0 1px 3px rgba(0,0,0,0.05); */ /* Shadow not effective on dark bg */
 }
 
 /* Specifically for #text on index.html if it needs different styling */
 #text {
-	text-align: left; /* Content from index.txt might be better left-aligned */
+	text-align: left;
 }
-#text h2, #text p {
-	text-align: center; /* But keep the loaded content centered as per original intent */
+#text h2, #text p { /* This might need adjustment based on RSS content */
+	text-align: left; /* Default left align for RSS content */
+}
+#text h2 a { /* Ensure links in headings are also styled if not inheriting */
+    color: var(--link-color);
 }
 
 
-/* Styling for lists (e.g., random_list.js output) */
-/* .odd, .even are defined below, after this section */
+/* Styling for lists (e.g., random_list.js output - enhanced) */
+.odd, .even {
+	padding: 8px 10px;
+	border-bottom: 1px solid var(--border-color-medium);
+	text-align: left;
+	margin: 0 auto;
+	max-width: 600px;
+}
 
-.even-winner, /* Combined .even-winner and .odd-winner for common properties */
+.odd {
+	background-color: var(--secondary-bg-color); /* Use secondary for slight difference */
+}
+.even {
+    background-color: var(--primary-bg-color); /* Or transparent to inherit from container */
+}
+
+.even-winner,
 .odd-winner {
 	font-weight: bold;
-	color: #5cb85c; /* Green for winners - WCAG AA on #333 (5.8:1) and #484848 (4.2:1, borderline, but bold helps) */
+	color: var(--success-text-color);
 }
-
-/* .even-winner background-color is inherited or default */
-/* .odd-winner background-color is set with .odd */
+.odd-winner {
+	background-color: var(--secondary-bg-color); /* Match .odd background */
+}
 
 
 /* Error Messages */
 .error {
-	/* background-color: #333; */ /* Redundant */
-	color: #f56464; /* Light red - WCAG AA (5.7:1 on #333) */
+	color: var(--error-text-color); 
 	padding: 10px;
-	border: 1px solid #f56464;
-	border-radius: 4px;
+	border: 1px solid var(--error-text-color);
+	border-radius: 5px; /* Consistent rounding */
 	margin-top: 10px;
 	font-weight: bold;
+    background-color: rgba(240, 71, 71, 0.1); /* Subtle red background */
 }
 
-/* Remove the generic .result class style as #result ID is used */
-/*
-.result {
-	text-align: center;
-	color: rgb(30, 172, 30); // This color had poor contrast
-	width: 1000px; // Too restrictive
-	font-family: Arial, Helvetica, sans-serif; // Moved to body
-}
-*/
 
-/* .odd and .even styles are here to ensure they are not removed by mistake if .result is deleted */
-.odd {
-	background-color: #484848; /* Slightly darker than #535353 for better contrast if needed */
-	padding: 8px 10px; /* More padding */
-	border-bottom: 1px solid #444; /* Separator */
-	text-align: left; /* Align list item text to the left */
-	margin: 0 auto; /* Center the block if it's narrower */
-	max-width: 600px; /* Max width for list items */
+/* Marquee Styles */
+.marquee-container {
+    background-color: var(--marquee-bg-color); 
+    color: var(--marquee-text-color);
+    padding: 5px 10px;
+    width: 100%;
+    text-align: center;
+    font-size: 0.9em;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    height: 30px;
+    line-height: 20px;
 }
 
-.even {
-	/* background-color: #333; Redundant if parent is #333 or #3a3a3a and this should match */
-	padding: 8px 10px; /* More padding */
-	border-bottom: 1px solid #444; /* Separator */
-	text-align: left; /* Align list item text to the left */
-	margin: 0 auto; /* Center the block if it's narrower */
-	max-width: 600px; /* Max width for list items */
+.marquee-content {
+    display: inline-block;
+    white-space: nowrap;
 }
 
-/* Ensure .odd-winner also has the .odd background */
-.odd-winner {
-	background-color: #484848; /* Ensure it has its distinct odd row background */
+
+/* Settings Page Specific Styles */
+/* .page-container is already styled above */
+
+#settings-content h2 {
+    margin-top: 30px;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-color-light);
+    color: var(--heading-text-color);
+}
+
+#settings-content p {
+    margin-bottom: 15px;
+    line-height: 1.7;
+}
+#settings-content label { /* Improve spacing for labels in settings */
+    display: inline-block;
+    min-width: 200px; /* Align input fields */
+    margin-bottom: 8px;
+}
+#settings-content input[type="color"], 
+#settings-content select {
+    margin-left: 10px; /* Space after label */
+}
+
+
+.status-message {
+    font-size: 0.9em;
+    color: var(--text-color); /* Use general text color, or a specific status color */
+    opacity: 0.8; /* Make it slightly muted */
+    margin-top: 5px;
+    min-height: 1em;
+}
+
+/* RSS Feed Display Styles */
+#text article { /* Style for articles within #text (RSS feed items) */
+    border-bottom: 1px solid var(--border-color-light);
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+#text article:last-child {
+    border-bottom: none;
+}
+.feed-item-date {
+    font-size: 0.8em;
+    color: var(--marquee-text-color); /* Using marquee's softer text color */
+    margin-bottom: 5px;
+}
+.feed-item-description {
+    font-size: 0.9em;
+    margin-bottom: 15px;
+    line-height: 1.5;
 }
