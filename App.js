@@ -42,9 +42,21 @@ class App {
             if (typeof this.currentView.postRender === 'function') {
                 this.currentView.postRender();
             }
+            // After view is rendered and its postRender is called, update the navigation menu
+            if (typeof loadNavigationMenu === 'function') {
+                loadNavigationMenu(hash);
+            } else {
+                console.warn('loadNavigationMenu function not found. Cannot update nav active state.');
+            }
         } else {
             console.warn(`No view found for route: ${hash}`);
             this.mainContentElement.innerHTML = '<p class="error">Page not found.</p>';
+            // Even if page not found, update nav to reflect the hash (or clear active state)
+            if (typeof loadNavigationMenu === 'function') {
+                loadNavigationMenu(hash); // Or pass a specific value to clear active, e.g. null
+            } else {
+                console.warn('loadNavigationMenu function not found. Cannot update nav active state.');
+            }
             this.currentView = null;
         }
     }

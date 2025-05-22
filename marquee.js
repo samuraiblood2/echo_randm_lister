@@ -3,6 +3,10 @@
 const MARQUEE_STORAGE_KEY = 'marqueeMessages';
 // Using a more specific selector based on the ID of the container and the class of the content.
 const MARQUEE_CONTENT_SELECTOR = '#motd-marquee-container .marquee-content';
+const MARQUEE_ROTATION_DELAY = 5000; // 5 seconds
+
+let currentMessageIndex = 0;
+let marqueeIntervalId = null;
 
 /**
  * Retrieves marquee messages from localStorage.
@@ -60,23 +64,45 @@ function clearAllMarqueeMessages() {
  * Updates the marquee display with the latest message or a default message.
  */
 function updateMarqueeDisplay() {
-    const marqueeContentElement = document.querySelector(MARQUEE_CONTENT_SELECTOR);
+    // Clear any existing interval
+    if (marqueeIntervalId !== null) {
+        clearInterval(marqueeIntervalId);
+        marqueeIntervalId = null;
+    }
 
-    if (marqueeContentElement) {
-        const messages = getMarqueeMessages();
-        if (messages.length > 0) {
-            // Display the most recent message (last one in the array)
-            marqueeContentElement.textContent = messages[messages.length - 1];
-        } else {
-            // Display a default message if no messages are stored
-            // This will override the initial "Welcome!" message set by loadMarquee() if localStorage is empty.
-            marqueeContentElement.textContent = "No current messages. Stay tuned!";
-        }
-    } else {
+    const marqueeContentElement = document.querySelector(MARQUEE_CONTENT_SELECTOR);
+    if (!marqueeContentElement) {
         // This might occur if updateMarqueeDisplay is called before loadMarquee has created the element.
-        // The DOMContentLoaded listener for loadMarquee should ideally run first or create the element structure synchronously.
-        // However, marquee.js has its own DOMContentLoaded listener.
         console.warn("Marquee content element not found during updateMarqueeDisplay. It might not have been created yet.");
+        return;
+    }
+
+    const messages = getMarqueeMessages();
+
+    if (messages.length === 0) {
+        marqueeContentElement.textContent = "No current messages. Stay tuned!";
+        currentMessageIndex = 0; // Reset index
+    } else if (messages.length === 1) {
+        marqueeContentElement.textContent = messages[0];
+        currentMessageIndex = 0; // Only one message, so index is 0
+    } else {
+        // Multiple messages, start rotation
+        currentMessageIndex = 0; // Always start from the first message on update
+        marqueeContentElement.textContent = messages[currentMessageIndex];
+
+        marqueeIntervalId = setInterval(() => {
+            currentMessageIndex = (currentMessageIndex + 1) % messages.length;
+            // Re-query the element inside interval in case DOM was manipulated, though less likely for marquee
+            const currentMarqueeElement = document.querySelector(MARQUEE_CONTENT_SELECTOR);
+            if (currentMarqueeElement) {
+                // Optional: Add a fade-out/fade-in transition here for smoother change
+                currentMarqueeElement.textContent = messages[currentMessageIndex];
+            } else {
+                // If element disappears, clear interval
+                clearInterval(marqueeIntervalId);
+                marqueeIntervalId = null;
+            }
+        }, MARQUEE_ROTATION_DELAY);
     }
 }
 

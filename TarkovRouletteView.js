@@ -15,6 +15,7 @@ class TarkovRouletteView extends BaseView {
     render() {
         // HTML structure from tarkov_roulette.html's main content area
         return `
+        <div class="page-container">
             <h1>Tarkov Roulette</h1>
             <p>Scav or PMC?</p>
             <form id="tr-form">
@@ -24,7 +25,7 @@ class TarkovRouletteView extends BaseView {
             </form>
             <div id="tr-result"></div>  <!-- For initial type selection, dynamic checkboxes -->
             <div id="tr-location"></div> <!-- For final location result -->
-        `;
+        </div>`;
         // Using data-option for easier event handling
     }
 

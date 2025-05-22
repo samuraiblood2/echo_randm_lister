@@ -8,6 +8,7 @@ class RandomListerView extends BaseView {
     render() {
         // HTML structure from random_list.html's main content area
         return `
+        <div class="page-container">
             <h1>Random Lister</h1>
             <p>Enter the different items to iterate over inside the textarea. Separate different items by new lines.</p>
             <textarea id="rl-items" rows="10" cols="125"></textarea> <br><br>
@@ -16,7 +17,7 @@ class RandomListerView extends BaseView {
                 <button type="button" id="rl-submit">Submit</button>
             </form>
             <br><br><div class="result" id="rl-result"></div>
-        `;
+        </div>`;
         // Prefixed IDs (e.g., rl-items) to avoid conflicts if multiple views are ever on one page (less likely in this SPA model but good practice).
     }
 

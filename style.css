@@ -292,6 +292,28 @@ button:hover {
 #text article:last-child {
     border-bottom: none;
 }
+
+/* Styles for items rendered by RssFeedView.js (replaces #text article for new structure) */
+.rss-item {
+    border-bottom: 1px solid var(--border-color-light);
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+.rss-item:last-child { /* This might not work as expected if last hr is removed after all items */
+    border-bottom: none;
+}
+.rss-item h3 { /* Adjusting heading for feed items */
+    margin-top: 0; /* Remove default h3 margin if needed */
+    margin-bottom: 5px;
+    font-size: 1.1em; /* Slightly smaller than main page h1/h2 */
+}
+.rss-item h3 a {
+    color: var(--link-color); /* Ensure links in feed titles use the theme link color */
+    text-decoration: none;
+}
+.rss-item h3 a:hover {
+    text-decoration: underline;
+}
 .feed-item-date {
     font-size: 0.8em;
     color: var(--marquee-text-color); /* Using marquee's softer text color */

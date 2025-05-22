@@ -7,6 +7,7 @@ class RandomNumberView extends BaseView {
     render() {
         // HTML structure from random_number.html's main content area
         return `
+        <div class="page-container">
             <h1>Random Number Generator</h1>
             <p>Enter the range of numbers (ie 1 to 100) and the number of iterations.</p>
             <form id="rn-form">
@@ -15,7 +16,7 @@ class RandomNumberView extends BaseView {
                 <button type="button" id="rn-submit">Submit</button>
             </form>
             <br><br><div class="result" id="rn-result"></div>
-        `;
+        </div>`;
         // Prefixed IDs (e.g., rn-from)
     }
 

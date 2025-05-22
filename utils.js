@@ -93,16 +93,31 @@ function loadNavigationMenu(activePageUrl) {
 					}
 				});
 				
-				// Set 'active' id on the current page's link
-				// activePageUrl is now activePageHash (e.g., '#home', '#settings')
+				// First, explicitly remove 'active' id from all links within the nav placeholder
 				links.forEach(link => {
-					// link.hash returns the # part of an href, e.g. "#settings"
-					// Ensure comparison is robust for cases where link.hash might be empty for root links
-					// or if activePageHash is consistently provided (e.g. '#home' for root)
+					link.removeAttribute('id'); // More robust than link.id = ''
+				});
+				
+				// Then, set 'active' id on the matching link
+				// activePageUrl (parameter) is the activePageHash (e.g., '#home', '#settings')
+				let foundActive = false;
+				links.forEach(link => {
 					if (link.hash === activePageUrl) {
 						link.id = 'active';
+						foundActive = true;
 					}
 				});
+
+				// Fallback for the root path if activePageUrl is '#home' and no link has exactly "#home"
+				// This is often needed if the server serves index.html for '/' and link is <a href="/">Home</a>
+				// However, our menu.html uses specific hashes like #home.
+				// The call in index.html `loadNavigationMenu(window.location.hash || '#home')`
+				// makes activePageUrl always have a value, typically '#home' for the root.
+				if (!foundActive && activePageUrl === '#home') {
+					// Attempt to find a link that points to index.html or is the conceptual "home" link
+					// For our menu.html, a link with href="#home" should always exist.
+					// This block might be redundant if menu.html always has a #home link.
+				}
 			} else {
 				console.error(`Error fetching menu.html: Status ${xhr.status}`);
 				navPlaceholder.innerHTML = '<p class="error">Error loading navigation menu.</p>';

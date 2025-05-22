@@ -8,12 +8,13 @@ class CoinFlipperView extends BaseView {
     render() {
         // HTML structure from coin_flipper.html's main content area
         return `
+        <div class="page-container">
             <h1>Coin Flipper</h1>
             <form id="cf-form">
                 <button type="button" id="cf-flip-coin">Flip Coin</button>
             </form>
             <div id="cf-result"></div>
-        `;
+        </div>`;
         // Prefixed IDs (e.g., cf-form)
     }
 

@@ -12,23 +12,22 @@
 function fetchRSS(feedUrl, callback) {
     const xhr = new XMLHttpRequest();
     xhr.open('GET', feedUrl, true);
-    // Setting responseType to 'text' to get the XML as a string.
-    // DOMParser will be used later.
     xhr.responseType = 'text';
 
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-            if (xhr.status === 200) {
-                callback(null, xhr.responseText);
-            } else {
-                callback(new Error(`Failed to fetch RSS feed. Status: ${xhr.status}`), null);
-            }
+    xhr.onload = function() {
+        if (xhr.status >= 200 && xhr.status < 300) {
+            console.log('fetchRSS: Success - Status:', xhr.status, 'Response length:', xhr.responseText.length);
+            // console.log('fetchRSS: Response XML:', xhr.responseText); // Potentially very long, use with caution
+            callback(null, xhr.responseText);
+        } else {
+            console.error('fetchRSS: Error - Status:', xhr.status, xhr.statusText);
+            callback(new Error('Failed to fetch RSS feed. Status: ' + xhr.status + ' ' + xhr.statusText), null);
         }
     };
 
     xhr.onerror = function() {
-        // This handles network errors (e.g., DNS resolution failure, server unreachable).
-        callback(new Error('Network error while fetching RSS feed.'), null);
+        console.error('fetchRSS: Network Error.');
+        callback(new Error('Failed to fetch RSS feed due to network error.'), null);
     };
 
     try {
@@ -42,50 +41,66 @@ function fetchRSS(feedUrl, callback) {
 /**
  * Parses an XML string (RSS or Atom feed) into an array of feed item objects.
  * @param {string} xmlString - The XML string to parse.
- * @returns {object[]} An array of feed items { title, link, description, pubDate }.
+ * @returns {object} An object like { items: [], error?: string, details?: string }.
  */
 function parseRSS(xmlString) {
+    console.log('parseRSS: Input XML string length:', xmlString ? xmlString.length : 'null');
     const parser = new DOMParser();
     const xmlDoc = parser.parseFromString(xmlString, "application/xml");
 
-    // Check for parser errors (common way browsers indicate this)
     const parserError = xmlDoc.querySelector("parsererror");
     if (parserError) {
-        console.error("Error parsing XML:", parserError.textContent);
-        return []; // Return empty array on parsing error
+        console.error("parseRSS: XML parsing error:", parserError.textContent);
+        return { error: "Failed to parse XML.", details: parserError.textContent, items: [] }; // Return structured error
     }
 
-    let items = [];
-    // Try RSS <item> elements first
-    let feedItems = xmlDoc.querySelectorAll("item");
-
-    if (feedItems.length === 0) {
-        // If no <item>, try Atom <entry> elements
-        feedItems = xmlDoc.querySelectorAll("entry");
-        feedItems.forEach(itemNode => {
-            const title = itemNode.querySelector("title")?.textContent || "";
-            const linkNode = itemNode.querySelector("link");
-            const link = linkNode?.getAttribute("href") || linkNode?.textContent || "";
-            // Atom might have content in <summary> or <content>
-            const summary = itemNode.querySelector("summary")?.textContent || "";
-            const content = itemNode.querySelector("content")?.textContent || "";
-            const description = summary || content; // Prefer summary, fallback to content
-            const pubDate = itemNode.querySelector("published")?.textContent || itemNode.querySelector("updated")?.textContent || "";
-            items.push({ title, link, description: description.substring(0, 200) + (description.length > 200 ? "..." : ""), pubDate });
-        });
+    let itemsNodeList = xmlDoc.querySelectorAll("item"); // RSS
+    let isAtom = false;
+    if (itemsNodeList.length === 0) {
+        itemsNodeList = xmlDoc.querySelectorAll("entry"); // Atom
+        console.log('parseRSS: No <item> found, found <entry> count:', itemsNodeList.length);
+        if(itemsNodeList.length > 0) isAtom = true;
     } else {
-        // Process RSS <item> elements
-        feedItems.forEach(itemNode => {
-            const title = itemNode.querySelector("title")?.textContent || "";
-            const link = itemNode.querySelector("link")?.textContent || "";
-            const description = itemNode.querySelector("description")?.textContent || "";
-            const pubDate = itemNode.querySelector("pubDate")?.textContent || "";
-            // Simple text extraction and truncation for description
-            items.push({ title, link, description: description.substring(0, 200) + (description.length > 200 ? "..." : ""), pubDate });
-        });
+        console.log('parseRSS: Found <item> count:', itemsNodeList.length);
     }
-    
-    return items;
+
+    const feedItems = [];
+    itemsNodeList.forEach(itemNode => {
+        const title = itemNode.querySelector("title") ? itemNode.querySelector("title").textContent.trim() : "No title";
+        
+        let link = '';
+        const linkElement = itemNode.querySelector("link");
+        if (linkElement) {
+            link = (isAtom ? linkElement.getAttribute('href') : linkElement.textContent)?.trim() || '';
+        }
+        
+        let description = "";
+        if (isAtom) {
+            const summary = itemNode.querySelector("summary")?.textContent.trim() || "";
+            const content = itemNode.querySelector("content")?.textContent.trim() || "";
+            description = summary || content;
+        } else {
+            description = itemNode.querySelector("description")?.textContent.trim() || "";
+        }
+        // Basic sanitization/truncation
+        description = description.replace(/<[^>]+>/g, '').substring(0, 200) + (description.length > 200 ? '...' : '');
+        if (description.trim() === "..." || description.trim() === "") description = "No description.";
+
+
+        const pubDate = itemNode.querySelector("pubDate")?.textContent.trim() || 
+                        itemNode.querySelector("published")?.textContent.trim() || 
+                        itemNode.querySelector("updated")?.textContent.trim() || "No date";
+
+        feedItems.push({ title, link, description, pubDate });
+    });
+
+    if (itemsNodeList.length > 0 && feedItems.length > 0) {
+       console.log('parseRSS: First parsed item:', JSON.stringify(feedItems[0], null, 2));
+    } else if (itemsNodeList.length > 0 && feedItems.length === 0) {
+       console.warn('parseRSS: Items found in XML, but no data extracted. Check selectors or item structure.');
+    }
+    console.log('parseRSS: Returning feedItems count:', feedItems.length);
+    return { items: feedItems }; // Return object with items array
 }
 
 /**
@@ -94,6 +109,7 @@ function parseRSS(xmlString) {
  * @param {string} containerElementId - The ID of the DOM element to display the feed in.
  */
 function displayRSSFeed(feedItems, containerElementId) {
+    console.log('displayRSSFeed: Displaying items in container:', containerElementId, 'Item count:', feedItems ? feedItems.length : 'null/undefined');
     const container = getElement(containerElementId); // From utils.js
     if (!container) {
         console.error(`Feed container element '${containerElementId}' not found.`);
@@ -103,7 +119,7 @@ function displayRSSFeed(feedItems, containerElementId) {
     clearElement(containerElementId); // From utils.js
 
     if (!feedItems || feedItems.length === 0) {
-        setElementHTML(containerElementId, "<p>No feed items to display or feed is empty.</p>"); // From utils.js
+        setElementHTML(containerElementId, "<p>No feed items to display.</p>"); // Updated message
         return;
     }
 
