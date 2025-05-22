@@ -94,9 +94,12 @@ function loadNavigationMenu(activePageUrl) {
 				});
 				
 				// Set 'active' id on the current page's link
+				// activePageUrl is now activePageHash (e.g., '#home', '#settings')
 				links.forEach(link => {
-					// Compare the attribute directly, as it's relative in menu.html
-					if (link.getAttribute('href') === activePageUrl) {
+					// link.hash returns the # part of an href, e.g. "#settings"
+					// Ensure comparison is robust for cases where link.hash might be empty for root links
+					// or if activePageHash is consistently provided (e.g. '#home' for root)
+					if (link.hash === activePageUrl) {
 						link.id = 'active';
 					}
 				});

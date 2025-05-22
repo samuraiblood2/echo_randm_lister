@@ -1,3 +1,19 @@
+// ==================================================================================
+// DEPRECATED FILE: random_number.js
+// ----------------------------------------------------------------------------------
+// The functionality originally in this file has been refactored and integrated 
+// into the Single Page Application (SPA) structure.
+//
+// Specifically, the "Random Number Generator" tool is now managed by:
+// - RandomNumberView.js: Contains the class for rendering the view and handling its logic.
+// - App.js: Handles routing to this view.
+// - index.html: Includes RandomNumberView.js and defines the route.
+//
+// This file (random_number.js) is no longer used by the application and can be
+// considered for removal in future cleanup efforts.
+// ==================================================================================
+
+/*
 // Main function to generate and display random numbers.
 function generateRandomNumbers() {
 	// Clear any previous results from the display using utility function.
@@ -74,3 +90,4 @@ function getRandomInt(minValue, maxValue) {
 // displayError(elementId, errorMessage)
 // clearElement(elementId)
 // getElement(elementId)
+*/

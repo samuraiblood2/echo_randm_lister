@@ -1,3 +1,19 @@
+// ==================================================================================
+// DEPRECATED FILE: tarkov_roulette.js
+// ----------------------------------------------------------------------------------
+// The functionality originally in this file has been refactored and integrated 
+// into the Single Page Application (SPA) structure.
+//
+// Specifically, the "Tarkov Roulette" tool is now managed by:
+// - TarkovRouletteView.js: Contains the class for rendering the view and handling its logic.
+// - App.js: Handles routing to this view.
+// - index.html: Includes TarkovRouletteView.js and defines the route.
+//
+// This file (tarkov_roulette.js) is no longer used by the application and can be
+// considered for removal in future cleanup efforts.
+// ==================================================================================
+
+/*
 // utils.js functions used:
 // getElement(elementId)
 // appendToElement(elementId, htmlContent)
@@ -160,3 +176,4 @@ function createCheckbox(containerId, id, name) {
 // clearElement(elementId) for printclear
 
 // stringOfEnum is replaced by findKeyByValue
+*/

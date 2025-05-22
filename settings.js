@@ -92,6 +92,9 @@ function getSetting(key, defaultValue = null) {
 // saveSetting('testArray', [1, 'test', { nested: true }]);
 // console.log(getSetting('testArray'));
 
+// NOTE: loadSettingsPage() and renderMarqueeMessagesList() have been moved 
+// into SettingsView.js as they are specific to the settings page UI.
+
 /**
  * Helper function to display a status message and clear it after a specified duration.
  * @param {string} elementId - The ID of the status message element.
@@ -108,130 +111,9 @@ function displayStatusMessage(elementId, message, duration = 3000) {
     }
 }
 
-/**
- * Renders the list of marquee messages into the 'marquee-messages-list' UL.
- */
-function renderMarqueeMessagesList() {
-    const listElement = getElement('marquee-messages-list');
-    if (!listElement) {
-        console.error("Marquee messages list element ('marquee-messages-list') not found.");
-        return;
-    }
+// renderMarqueeMessagesList() has been moved to SettingsView.js
+// loadSettingsPage() has been moved to SettingsView.js (as postRender logic)
 
-    clearElement('marquee-messages-list'); // Clear existing list items
-    const messages = getMarqueeMessages(); // Assumes getMarqueeMessages is globally available from marquee.js
-
-    if (messages.length === 0) {
-        appendToElement('marquee-messages-list', '<li>No messages.</li>');
-    } else {
-        messages.forEach(message => {
-            // Could enhance this to add delete buttons per message
-            // For now, just displaying the message text.
-            const liHTML = `<li>${message.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</li>`; // Basic XSS protection
-            appendToElement('marquee-messages-list', liHTML);
-        });
-    }
-}
-
-/**
- * Initializes the settings page UI elements and event listeners.
- */
-function loadSettingsPage() {
-    // RSS Feed URL Settings
-    const rssUrlInput = getElement('rss-url');
-    const saveRssUrlButton = getElement('save-rss-url');
-
-    if (rssUrlInput) {
-        rssUrlInput.value = getSetting('rssFeedUrl', '');
-    }
-
-    if (saveRssUrlButton && rssUrlInput) {
-        saveRssUrlButton.addEventListener('click', function() {
-            const urlValue = rssUrlInput.value.trim();
-            if (saveSetting('rssFeedUrl', urlValue)) {
-                displayStatusMessage('rss-status-message', 'RSS URL saved!');
-            } else {
-                displayStatusMessage('rss-status-message', 'Error saving RSS URL.');
-            }
-        });
-    }
-
-    // Marquee Messages Settings
-    renderMarqueeMessagesList(); // Initial render of the messages list
-
-    const newMessageInput = getElement('new-marquee-message');
-    const addMessageButton = getElement('add-marquee-message');
-    const clearMessagesButton = getElement('clear-marquee-messages');
-
-    if (addMessageButton && newMessageInput) {
-        addMessageButton.addEventListener('click', function() {
-            const messageText = newMessageInput.value.trim();
-            if (messageText) {
-                // addMarqueeMessage is globally available from marquee.js
-                if (addMarqueeMessage(messageText)) { 
-                    newMessageInput.value = ''; // Clear input field
-                    renderMarqueeMessagesList(); // Refresh the displayed list
-                    displayStatusMessage('marquee-status-message', 'Message added!');
-                } else {
-                    displayStatusMessage('marquee-status-message', 'Error adding message.');
-                }
-            } else {
-                displayStatusMessage('marquee-status-message', 'Message cannot be empty.');
-            }
-        });
-    }
-
-    if (clearMessagesButton) {
-        clearMessagesButton.addEventListener('click', function() {
-            // clearAllMarqueeMessages is globally available from marquee.js
-            clearAllMarqueeMessages(); 
-            renderMarqueeMessagesList(); // Refresh the displayed list (will show "No messages.")
-            displayStatusMessage('marquee-status-message', 'All messages cleared!');
-        });
-    }
-
-    // Theme Settings Logic (within loadSettingsPage)
-    const currentTheme = getSetting('themeSettings', DEFAULT_THEME_SETTINGS);
-    // Populate theme inputs
-    CONFIGURABLE_THEME_PROPERTIES.forEach(prop => {
-        const inputElement = getElement(prop.id);
-        if (inputElement) {
-            inputElement.value = currentTheme[prop.cssVar] || DEFAULT_THEME_SETTINGS[prop.cssVar];
-        }
-    });
-
-    const saveThemeButton = getElement('save-theme-settings');
-    if (saveThemeButton) {
-        saveThemeButton.addEventListener('click', function() {
-            const newThemeSettings = {};
-            CONFIGURABLE_THEME_PROPERTIES.forEach(prop => {
-                const inputElement = getElement(prop.id);
-                if (inputElement) {
-                    newThemeSettings[prop.cssVar] = inputElement.value;
-                }
-            });
-            saveSetting('themeSettings', newThemeSettings);
-            applyThemeSettings(newThemeSettings);
-            displayStatusMessage('theme-status-message', 'Theme saved and applied!');
-        });
-    }
-
-    const resetThemeButton = getElement('reset-default-theme');
-    if (resetThemeButton) {
-        resetThemeButton.addEventListener('click', function() {
-            applyThemeSettings(DEFAULT_THEME_SETTINGS);
-            saveSetting('themeSettings', DEFAULT_THEME_SETTINGS); // Persist the reset
-            // Repopulate inputs with default values
-            CONFIGURABLE_THEME_PROPERTIES.forEach(prop => {
-                const inputElement = getElement(prop.id);
-                if (inputElement) {
-                    inputElement.value = DEFAULT_THEME_SETTINGS[prop.cssVar];
-                }
-            });
-            displayStatusMessage('theme-status-message', 'Theme reset to default!');
-        });
-    }
-}
 
 /**
  * Applies a given theme settings object to the document's root element.

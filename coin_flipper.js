@@ -1,3 +1,19 @@
+// ==================================================================================
+// DEPRECATED FILE: coin_flipper.js
+// ----------------------------------------------------------------------------------
+// The functionality originally in this file has been refactored and integrated 
+// into the Single Page Application (SPA) structure.
+//
+// Specifically, the "Coin Flipper" tool is now managed by:
+// - CoinFlipperView.js: Contains the class for rendering the view and handling its logic.
+// - App.js: Handles routing to this view.
+// - index.html: Includes CoinFlipperView.js and defines the route.
+//
+// This file (coin_flipper.js) is no longer used by the application and can be
+// considered for removal in future cleanup efforts.
+// ==================================================================================
+
+/*
 // Initialize flip count
 let flipCount = 0;
 
@@ -25,3 +41,4 @@ function flipCoin() {
 // appendToElement(elementId, htmlContent)
 // displayError(elementId, errorMessage)
 // clearElement(elementId)
+*/

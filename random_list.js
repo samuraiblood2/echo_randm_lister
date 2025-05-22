@@ -1,3 +1,19 @@
+// ==================================================================================
+// DEPRECATED FILE: random_list.js
+// ----------------------------------------------------------------------------------
+// The functionality originally in this file has been refactored and integrated 
+// into the Single Page Application (SPA) structure.
+//
+// Specifically, the "Random Lister" tool is now managed by:
+// - RandomListerView.js: Contains the class for rendering the view and handling its logic.
+// - App.js: Handles routing to this view.
+// - index.html: Includes RandomListerView.js and defines the route.
+//
+// This file (random_list.js) is no longer used by the application and can be
+// considered for removal in future cleanup efforts.
+// ==================================================================================
+
+/*
 // Stores the list of items and their selection counts.
 // Using an object to map item names to counts.
 let itemList = {};
@@ -117,3 +133,4 @@ function resetForm() {
 // displayError(elementId, errorMessage)
 // clearElement(elementId)
 // getElement(elementId)
+*/
