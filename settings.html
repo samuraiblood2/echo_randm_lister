@@ -1,0 +1,73 @@
+<html>
+	<head>
+		<title>Settings</title>
+
+		<link rel="stylesheet" type="text/css" href="settings.css" />
+		<noscript>JavaScript needs to be enabled to run this program.</noscript>
+
+		<nav>
+			<ul class="navbar">
+				<li><a href="./index.html">Home</a></li>
+				<li><a href="./random_list.html">Random Lister</a></li>
+				<li><a href="./random_number.html">Random Number</a></li>
+				<li><a href="./coin_flipper.html">Coin Flipper</a></li>
+				<li><a href="./tarkov_roulette.html">Tarkov Roulette</a></li>
+				<li><a id="active" href="./settings.html">Settings</a></li>
+			</ul>
+		</nav>
+	</head>
+
+	<body>
+		<h1>Settings Page</h1>
+
+		<div class="tab">
+			<button class="tablinks active" onclick="openTab(event, 'generalTab')">General</button>
+			<button class="tablinks" onclick="openTab(event, 'appearanceTab')">Appearance</button>
+			<button class="tablinks" onclick="openTab(event, 'feedsTab')">Feeds</button>
+		</div>
+
+		<div id="generalTab" class="tabcontent" style="display: block;">
+			<h3>General Settings</h3>
+			<p>Some general settings will go here.</p>
+		</div>
+
+		<div id="appearanceTab" class="tabcontent">
+			<h3>Appearance Settings</h3>
+			<p>Customize the look and feel of the application.</p>
+
+			<h4>Navbar Button Colors</h4>
+			<div>
+				<label for="navbarBgColor">Navbar Background:</label>
+				<input type="color" id="navbarBgColor" value="#202020">
+			</div>
+			<div>
+				<label for="navButtonBgColor">Button Background:</label>
+				<input type="color" id="navButtonBgColor" value="#202020">
+			</div>
+			<div>
+				<label for="navButtonTextColor">Button Text:</label>
+				<input type="color" id="navButtonTextColor" value="#FFFFFF">
+			</div>
+			<div>
+				<label for="navButtonHoverBgColor">Button Hover Background:</label>
+				<input type="color" id="navButtonHoverBgColor" value="#1EAC1E">
+			</div>
+			<div>
+				<label for="navButtonActiveBgColor">Button Active Background:</label>
+				<input type="color" id="navButtonActiveBgColor" value="#1EAC1E">
+			</div>
+		</div>
+
+		<div id="feedsTab" class="tabcontent">
+			<h3>Feed Settings</h3>
+			<p>Feed settings will go here.</p>
+		</div>
+
+		<div id="text">
+
+		</div>
+
+		<script type="text/javascript" src="settings.js"> </script>
+		<!-- The initSettingsTabs function is now called by settings.js using DOMContentLoaded -->
+	</body>
+</html>

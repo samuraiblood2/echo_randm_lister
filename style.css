@@ -1,3 +1,11 @@
+:root {
+	--navbar-button-bg-color: rgb(32, 32, 32);
+	--navbar-button-text-color: white;
+	--navbar-button-hover-bg-color: rgb(30, 172, 30);
+	--navbar-button-active-bg-color: rgb(30, 172, 30);
+	--navbar-bg-color: rgb(32, 32, 32);
+}
+
 * {
 	background-color: #333;
 	color: white;
@@ -6,7 +14,7 @@
 .navbar {
 	text-align: center;
 	overflow: hidden;
-	background-color: rgb(32, 32, 32);
+	background-color: var(--navbar-bg-color);
 	font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -16,24 +24,41 @@
 
 .navbar a {
 	font-size: 16px;
-	color: white;
+	color: var(--navbar-button-text-color);
 	text-align: center;
 	padding: 0px 40px;
 	text-decoration: none;
-	background-color: rgb(32, 32, 32);
+	background-color: var(--navbar-button-bg-color);
 }
 
 .navbar a:hover {
-	background-color: rgb(30, 172, 30);
+	background-color: var(--navbar-button-hover-bg-color);
 }
 
+/* General .active class, if used on a navbar link */
+.navbar a.active {
+	background-color: var(--navbar-button-active-bg-color);
+}
+
+/* ID #active used for the current page link in the navbar */
+.navbar a#active { /* This is the primary selector for active navbar links */
+	background-color: var(--navbar-button-active-bg-color);
+}
+
+/* General .active class, if used on a navbar link (alternative to using ID) */
+.navbar a.active {
+	background-color: var(--navbar-button-active-bg-color);
+}
+
+/* Retaining a general .active class for other potential uses, though it now uses the navbar active color. */
+/* Consider if a different variable is needed for non-navbar .active elements. */
 .active {
-	background-color: rgb(30, 172, 30);
+	background-color: var(--navbar-button-active-bg-color);
 }
 
-#active {
-	background-color: rgb(30, 172, 30);
-}
+/* The generic #active selector has been removed to rely on the more specific .navbar a#active for navbar items. */
+/* If #active is used outside the navbar for different styling, it should be defined separately. */
+
 
 .odd {
 	background-color: #535353;
