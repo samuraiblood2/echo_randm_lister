@@ -99,6 +99,9 @@ a:hover {
 .navbar li.dropdown-category {
     position: relative; 
     display: inline-block; 
+    /* Debugging Styles */
+    overflow: visible !important;
+    height: auto !important;
 }
 
 .navbar li.dropdown-category > a {
@@ -123,6 +126,8 @@ a:hover {
     /* Debugging Styles */
     background-color: #333 !important;
     overflow: visible !important;
+    height: auto !important;
+    max-height: none !important;
 }
 
 .navbar li.dropdown-category:hover > ul.dropdown-menu {
