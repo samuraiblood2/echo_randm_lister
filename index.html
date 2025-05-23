@@ -20,10 +20,37 @@
     <script type="text/javascript" src="RandomNumberView.js"></script>
     <script type="text/javascript" src="CoinFlipperView.js"></script>
     <script type="text/javascript" src="TarkovRouletteView.js"></script> <!-- Added TarkovRouletteView -->
-    <script type="text/javascript" src="ToolsView.js"></script> <!-- Added ToolsView -->
     <script type="text/javascript" src="App.js"></script>
     <!-- Specific View class files will be created later -->
+    <script>
+        // Simple PlaceholderView for tools not yet implemented
+        class PlaceholderView extends BaseView {
+            constructor() {
+                super();
+                // Extract tool name from hash, if possible, for a more dynamic message
+                this.toolName = "This tool";
+                const hash = window.location.hash;
+                if (hash && hash.startsWith("#tool-")) {
+                    const toolId = hash.substring(6); // Remove #tool-
+                    // Convert toolId (e.g., "random-string") to a more readable name
+                    this.toolName = toolId.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+                }
+            }
 
+            render() {
+                return `
+                    <div class="page-container">
+                        <h1>${this.toolName}</h1>
+                        <div id="placeholder-content-wrapper" style="text-align: center;">
+                            <p>🛠️ ${this.toolName} is currently under development. 🛠️</p>
+                            <p>Please check back later!</p>
+                        </div>
+                    </div>
+                `;
+            }
+            // No postRender or destroy needed for this simple view
+        }
+    </script>
     <noscript>JavaScript needs to be enabled to run this program.</noscript>
     <script>
         // Early theme application
@@ -58,15 +85,26 @@
                 typeof RandomNumberView === 'function' &&
                 typeof CoinFlipperView === 'function' &&
                 typeof TarkovRouletteView === 'function' &&
-                typeof ToolsView === 'function') { // Added ToolsView check
+                typeof PlaceholderView === 'function') { // Added PlaceholderView check
                 const appRoutes = {
                     '#home': RssFeedView,
                     '#settings': SettingsView,
-                    '#random-lister': RandomListerView,
-                    '#random-number': RandomNumberView,
-                    '#coin-flipper': CoinFlipperView,
-                    '#tarkov-roulette': TarkovRouletteView,
-                    '#tools': ToolsView, // Added ToolsView route
+                    // Tool Routes:
+                    '#tool-rss-reader': RssFeedView, // Reuses existing RssFeedView
+                    '#tool-marquee-editor': PlaceholderView,
+                    '#tool-random-string': PlaceholderView,
+                    '#tool-list-randomizer': RandomListerView, // Reuses existing RandomListerView
+                    '#tool-json-formatter': PlaceholderView,
+                    '#tool-coin-flipper': CoinFlipperView, // Reuses existing CoinFlipperView
+                    '#tool-random-number': RandomNumberView, // Reuses existing RandomNumberView
+                    '#tool-tarkov-roulette': TarkovRouletteView, // Reuses existing TarkovRouletteView
+                    // Old direct routes (optional, could be removed if menu is the only navigation)
+                    // For now, keeping them might avoid breaking direct links if any existed.
+                    // However, the task implies replacing them. I will remove them as per "Remove or replace the existing direct navigation links"
+                    // '#random-lister': RandomListerView, 
+                    // '#random-number': RandomNumberView,
+                    // '#coin-flipper': CoinFlipperView,
+                    // '#tarkov-roulette': TarkovRouletteView,
                 };
                 new App(appRoutes);
             } else {

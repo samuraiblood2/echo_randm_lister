@@ -95,6 +95,59 @@ a:hover {
 	font-weight: bold;
 }
 
+/* Dropdown Menu Styling */
+.navbar li.dropdown-category {
+    position: relative; 
+    display: inline-block; 
+}
+
+.navbar li.dropdown-category > a {
+    /* Inherits general .navbar a styles for padding, color, etc. */
+    /* No specific override needed here unless category labels need unique style */
+}
+
+.navbar ul.dropdown-menu {
+    display: none; 
+    position: absolute;
+    top: 100%; 
+    left: 0;
+    background-color: var(--navbar-bg-color); 
+    border: 1px solid var(--border-color-light); 
+    border-top: none; 
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    min-width: 200px; 
+    z-index: 1001; 
+    box-shadow: 0px 3px 5px rgba(0,0,0,0.2); 
+}
+
+.navbar li.dropdown-category:hover > ul.dropdown-menu {
+    display: block;
+}
+
+.navbar ul.dropdown-menu li {
+    display: block; 
+}
+
+.navbar ul.dropdown-menu li a {
+    display: block; 
+    padding: 10px 15px;
+    /* color: var(--navbar-text-color); Ensure this is explicitly set or inherited correctly */
+    /* background-color: var(--navbar-bg-color); Ensure this is explicitly set or inherited correctly */
+    text-decoration: none;
+    border-bottom: none; /* Override general .navbar a border if it exists */
+    font-size: calc(var(--base-font-size) * 0.95); 
+    text-align: left; /* Align text to the left for dropdown items */
+}
+
+.navbar ul.dropdown-menu li a:hover {
+    background-color: var(--button-hover-bg-color); 
+    color: var(--heading-text-color); 
+    border-bottom: none; 
+}
+/* End Dropdown Menu Styling */
+
 /* Old .odd, .even, .winner styles - these might be superseded by refactored list styles below */
 /* For safety, keeping them commented or to be removed if truly unused by tarkov_roulette.js directly */
 /*
@@ -448,45 +501,4 @@ div[role="tabpanel"].hidden { /* Class to hide panels */
     font-size: 0.9em;
     margin-bottom: 15px;
     line-height: 1.5;
-}
-
-/* Tools Page Specific Styles */
-#tool-selection-area {
-    margin-bottom: 20px;
-    padding: 15px;
-    background-color: var(--secondary-bg-color); /* Match settings page container */
-    border: 1px solid var(--border-color-light);
-    border-radius: 5px;
-}
-
-.tool-category {
-    margin-bottom: 15px;
-}
-
-.tool-category label {
-    display: block; /* Or inline-block with a set width */
-    margin-bottom: 5px;
-    font-weight: bold;
-    color: var(--heading-text-color);
-}
-
-.tool-category-dropdown {
-    padding: 8px;
-    border-radius: 4px;
-    border: 1px solid var(--border-color-medium);
-    background-color: var(--primary-bg-color);
-    color: var(--text-color);
-    min-width: 250px; /* Adjust as needed */
-}
-
-#tool-display-area {
-    padding: 20px;
-    border: 1px solid var(--border-color-light);
-    border-radius: 5px;
-    min-height: 200px;
-    background-color: var(--secondary-bg-color);
-}
-#tool-display-area h3 {
-    margin-top: 0;
-    color: var(--heading-text-color);
 }
