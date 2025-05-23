@@ -8,8 +8,12 @@ const DEFAULT_THEME_SETTINGS = {
     '--text-color': '#e0e0e0',              // Light gray for general text
     '--heading-text-color': '#ffffff',      // White for headings
     '--link-color': '#7289da',              // Discord-like blue/purple
-    '--nav-link-color': '#e0e0e0',          // Match general text color
-    '--nav-active-bg-color': '#7289da',     // Use link color for active nav item (text & border)
+    // '--nav-link-color': '#e0e0e0', // Replaced by navbar-text-color
+    // '--nav-active-bg-color': '#7289da', // Replaced by navbar-text-active-color and navbar-border-active-color
+    '--navbar-text-color': '#e0e0e0',         // Default navbar link text color
+    '--navbar-text-hover-color': '#ffffff',   // Navbar link text color on hover
+    '--navbar-text-active-color': '#7289da',  // Navbar link text color when active (e.g., Discord blue)
+    '--navbar-border-active-color': '#7289da',// Navbar link bottom border color when active/hover (e.g., Discord blue)
     '--button-bg-color': '#7289da',         // Button color matching link color
     '--button-hover-bg-color': '#5b6eae',   // Slightly darker/desaturated version of button color
     '--error-text-color': '#f04747',        // More vibrant red for errors
@@ -27,6 +31,10 @@ const CONFIGURABLE_THEME_PROPERTIES = [
    { id: 'theme-text-color', cssVar: '--text-color', type: 'color' },
    { id: 'theme-link-color', cssVar: '--link-color', type: 'color' },
    { id: 'theme-button-bg-color', cssVar: '--button-bg-color', type: 'color' },
+   { id: 'theme-navbar-text-color', cssVar: '--navbar-text-color', type: 'color' },
+   { id: 'theme-navbar-text-hover-color', cssVar: '--navbar-text-hover-color', type: 'color' },
+   { id: 'theme-navbar-text-active-color', cssVar: '--navbar-text-active-color', type: 'color' },
+   { id: 'theme-navbar-border-active-color', cssVar: '--navbar-border-active-color', type: 'color' },
    { id: 'theme-font-family', cssVar: '--font-family-primary', type: 'select' }
 ];
 

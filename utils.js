@@ -159,4 +159,9 @@ function loadMarquee() {
 
 	// Prepend the marquee container to the body
 	document.body.prepend(marqueeContainer);
+
+	// Update marquee display if the function is available
+	if (typeof updateMarqueeDisplay === 'function') {
+		updateMarqueeDisplay();
+	}
 }

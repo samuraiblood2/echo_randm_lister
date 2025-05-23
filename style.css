@@ -72,21 +72,27 @@ a:hover {
 
 .navbar a {
 	font-size: var(--base-font-size);
-	color: var(--nav-link-color);
+	color: var(--navbar-text-color); /* Updated */
 	text-align: center;
 	padding: 10px 15px;
 	text-decoration: none;
-	background-color: var(--navbar-bg-color);
+	background-color: transparent; /* Explicitly transparent, or var(--navbar-bg-color) */
 	margin: 0 2px;
-	border-bottom: 3px solid transparent;
+	border-bottom: 3px solid transparent; /* Default non-active border */
 }
 
-.navbar a:hover,
+.navbar a:hover {
+    color: var(--navbar-text-hover-color); /* Updated */
+    border-bottom-color: var(--navbar-border-active-color); /* Use same border color for hover and active */
+    background-color: transparent; /* Or var(--navbar-bg-color) or a specific hover background */
+	/* font-weight: bold; /* Optional: if hover should also be bold */
+}
+
 .navbar a#active {
-	background-color: transparent;
-	color: var(--nav-active-bg-color);
+    color: var(--navbar-text-active-color); /* Updated */
+    border-bottom-color: var(--navbar-border-active-color); /* Updated */
+    background-color: transparent; /* Or var(--navbar-bg-color) or a specific active background */
 	font-weight: bold;
-	border-bottom: 3px solid var(--nav-active-bg-color);
 }
 
 /* Old .odd, .even, .winner styles - these might be superseded by refactored list styles below */
@@ -248,12 +254,46 @@ button:hover {
     white-space: nowrap;
 }
 
+/* Tab Styles for Settings Page */
+.settings-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border-color-medium);
+    margin-bottom: 20px;
+}
+.settings-tabs button[role="tab"] {
+    padding: 10px 15px;
+    border: none;
+    background-color: transparent; /* Match page background */
+    cursor: pointer;
+    margin-right: 5px;
+    border-bottom: 3px solid transparent; /* For active indicator */
+    color: var(--text-color); /* Ensure text color is consistent */
+    font-size: 1em; /* Match other text */
+}
+.settings-tabs button[role="tab"]:hover {
+    background-color: var(--secondary-bg-color); /* Subtle hover */
+    color: var(--link-color); /* Change text color on hover for better feedback */
+}
+.settings-tabs button[role="tab"][aria-selected="true"] {
+    border-bottom-color: var(--link-color); /* Active tab indicator */
+    font-weight: bold;
+    color: var(--link-color); /* Active tab text color */
+}
+div[role="tabpanel"] { /* Default state for panels */
+    /* border: 1px solid var(--border-color-light); */ /* Optional: if panels need distinct borders */
+    /* padding: 15px; */ /* Optional: if panels need internal padding */
+}
+div[role="tabpanel"].hidden { /* Class to hide panels */
+    display: none;
+}
+
 
 /* Settings Page Specific Styles */
 /* .page-container is already styled above */
 
-#settings-content h2 {
-    margin-top: 30px;
+/* Updated to target h2 within sections inside tab panels */
+#settings-content-wrapper section h2 {
+    margin-top: 0; /* Reset top margin as panel provides spacing */
     margin-bottom: 15px;
     padding-bottom: 10px;
     border-bottom: 1px solid var(--border-color-light);
@@ -264,14 +304,18 @@ button:hover {
     margin-bottom: 15px;
     line-height: 1.7;
 }
-#settings-content label { /* Improve spacing for labels in settings */
+#settings-content-wrapper section label { /* Target labels within sections */
     display: inline-block;
     min-width: 200px; /* Align input fields */
     margin-bottom: 8px;
 }
-#settings-content input[type="color"], 
-#settings-content select {
+#settings-content-wrapper section input[type="color"], 
+#settings-content-wrapper section select {
     margin-left: 10px; /* Space after label */
+}
+/* Remove hr if sections are now visually separated by tabs or panel borders */
+#settings-content-wrapper hr {
+    display: none; 
 }
 
 
