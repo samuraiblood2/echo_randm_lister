@@ -12,11 +12,47 @@ class SettingsView extends BaseView {
                 <h1>Settings</h1>
                 <div id="settings-content-wrapper"> 
                     <div class="settings-tabs" role="tablist">
-                        <button role="tab" aria-selected="true" aria-controls="marquee-settings-panel" id="marquee-tab">Marquee Settings</button>
+                        <button role="tab" aria-selected="true" aria-controls="rss-settings-panel" id="rss-tab">RSS Settings</button>
+                        <button role="tab" aria-selected="false" aria-controls="marquee-settings-panel" id="marquee-tab">Marquee Settings</button>
                         <button role="tab" aria-selected="false" aria-controls="theme-settings-panel" id="theme-tab">Theme Settings</button>
                     </div>
 
-                    <div id="marquee-settings-panel" role="tabpanel" aria-labelledby="marquee-tab">
+                    <div id="rss-settings-panel" role="tabpanel" aria-labelledby="rss-tab">
+                        <section id="rss-settings">
+                            <h2>RSS Feed Settings</h2>
+                            <div class="setting-entry">
+                                <label for="new-rss-feed-url">Add RSS Feed URL:</label>
+                                <input type="text" id="new-rss-feed-url" name="new-rss-feed-url" size="50" placeholder="Enter feed URL">
+                                <button id="add-new-rss-feed-url">Add Feed</button>
+                            </div>
+                            <fieldset class="settings-group">
+                                <legend>Configured Feeds</legend>
+                                <ul id="rss-feed-urls-list">
+                                    <!-- Feed URLs will be listed here by JavaScript -->
+                                </ul>
+                                <p id="rss-status-message" class="status-message" style="margin-bottom: 20px;"></p>
+                            </fieldset>
+                            
+                            <fieldset class="settings-group">
+                                <legend>Display Options</legend>
+                                <div class="setting-entry">
+                                    <label for="rss-max-items">Max items per feed (0 for all):</label>
+                                    <input type="number" id="rss-max-items" min="0" value="10">
+                                </div>
+                                <div class="setting-entry">
+                                    <input type="checkbox" id="rss-show-descriptions" checked>
+                                    <label for="rss-show-descriptions">Show item descriptions</label>
+                                </div>
+                                <div class="setting-entry">
+                                    <input type="checkbox" id="rss-show-dates" checked>
+                                    <label for="rss-show-dates">Show item publication dates</label>
+                                </div>
+                                <button id="save-rss-display-options">Save Display Options</button>
+                                <p id="rss-display-options-status-message" class="status-message"></p>
+                            </fieldset>
+                        </section>
+                    </div>
+                    <div id="marquee-settings-panel" role="tabpanel" aria-labelledby="marquee-tab" class="hidden">
                         <section id="marquee-settings">
                             <h2>Marquee Messages</h2>
                             <div class="setting-entry">
@@ -110,6 +146,35 @@ class SettingsView extends BaseView {
 
         // This logic is moved from settings.js's loadSettingsPage()
         // Ensure settings.js (for getSetting/saveSetting, etc.) and marquee.js (for message functions) are loaded globally.
+
+        // RSS Feed URLs Management
+        this.renderRssFeedUrlsList(); // Initial display of saved URLs
+        const addNewRssFeedUrlButton = document.getElementById('add-new-rss-feed-url');
+        if (addNewRssFeedUrlButton) {
+            this.boundAddRssFeedUrl = this.addRssFeedUrl.bind(this);
+            addNewRssFeedUrlButton.addEventListener('click', this.boundAddRssFeedUrl);
+        }
+
+        // RSS Display Options Logic
+        const maxItemsInput = document.getElementById('rss-max-items');
+        const showDescCheckbox = document.getElementById('rss-show-descriptions');
+        const showDatesCheckbox = document.getElementById('rss-show-dates');
+        const saveDisplayOptionsButton = document.getElementById('save-rss-display-options');
+
+        if (maxItemsInput) maxItemsInput.value = getSetting('rssDisplayOptions_maxItems', 10);
+        if (showDescCheckbox) showDescCheckbox.checked = getSetting('rssDisplayOptions_showDesc', true);
+        if (showDatesCheckbox) showDatesCheckbox.checked = getSetting('rssDisplayOptions_showDates', true);
+
+        if (saveDisplayOptionsButton) {
+            this.boundSaveRssDisplayOptions = () => { 
+                const maxItems = parseInt(maxItemsInput.value, 10);
+                saveSetting('rssDisplayOptions_maxItems', isNaN(maxItems) || maxItems < 0 ? 0 : maxItems);
+                saveSetting('rssDisplayOptions_showDesc', showDescCheckbox.checked);
+                saveSetting('rssDisplayOptions_showDates', showDatesCheckbox.checked);
+                displayStatusMessage('rss-display-options-status-message', 'Display options saved!');
+            };
+            saveDisplayOptionsButton.addEventListener('click', this.boundSaveRssDisplayOptions);
+        }
         
         // Marquee Messages Logic
         this.renderMarqueeMessagesList(); 
@@ -203,6 +268,29 @@ class SettingsView extends BaseView {
         // Remove event listeners added in postRender.
         // This is crucial to prevent memory leaks if the view is re-rendered.
         // For simplicity, directly query and remove. A more robust system might store listener references.
+        const addNewRssFeedUrlButton = document.getElementById('add-new-rss-feed-url');
+        if (addNewRssFeedUrlButton && this.boundAddRssFeedUrl) {
+             addNewRssFeedUrlButton.removeEventListener('click', this.boundAddRssFeedUrl);
+        }
+        
+        // Cleanup for RSS Remove buttons (if listeners were stored individually)
+        if (this.rssRemoveButtonListeners) {
+            this.rssRemoveButtonListeners.forEach(entry => {
+                entry.element.removeEventListener(entry.type, entry.listener);
+            });
+            this.rssRemoveButtonListeners = [];
+        } else { // Fallback if individual listeners weren't stored (e.g. if renderRssFeedUrlsList was modified)
+            const rssFeedList = document.getElementById('rss-feed-urls-list');
+            if (rssFeedList) {
+                // Replace to remove all listeners from children if specific ones aren't tracked
+                rssFeedList.replaceWith(rssFeedList.cloneNode(true));
+            }
+        }
+        
+        const saveDisplayOptionsButton = document.getElementById('save-rss-display-options');
+        if (saveDisplayOptionsButton && this.boundSaveRssDisplayOptions) {
+            saveDisplayOptionsButton.removeEventListener('click', this.boundSaveRssDisplayOptions);
+        }
 
         const addMarqueeBtn = document.getElementById('add-marquee-message');
         if (addMarqueeBtn) addMarqueeBtn.replaceWith(addMarqueeBtn.cloneNode(true));
@@ -217,6 +305,79 @@ class SettingsView extends BaseView {
         if (resetThemeBtn) resetThemeBtn.replaceWith(resetThemeBtn.cloneNode(true));
         
         // console.log('SettingsView destroyed and event listeners cleaned up (via cloning).');
+    }
+
+    renderRssFeedUrlsList() {
+        const urls = getSetting('rssFeedUrls', []); // Assumes getSetting is available
+        const listElement = document.getElementById('rss-feed-urls-list');
+        if (!listElement) return;
+
+        listElement.innerHTML = ''; // Clear current list
+        if (urls.length === 0) {
+            const li = document.createElement('li');
+            li.textContent = 'No RSS feeds configured.';
+            listElement.appendChild(li);
+        } else {
+            urls.forEach(url => {
+                const li = document.createElement('li');
+                
+                const urlText = document.createElement('span');
+                urlText.textContent = url;
+                urlText.style.marginRight = '10px'; // Add some spacing
+                li.appendChild(urlText);
+
+                const removeButton = document.createElement('button');
+                removeButton.textContent = 'Remove';
+                removeButton.classList.add('remove-rss-btn'); // Add class for styling/identification
+                removeButton.dataset.url = url; // Store URL for easy removal
+                
+                // Store the bound function for this specific button
+                const boundRemoveRssFeedUrl = () => this.removeRssFeedUrl(url);
+                removeButton.addEventListener('click', boundRemoveRssFeedUrl);
+                
+                // Optionally store this listener for more precise removal in destroy()
+                if (!this.rssRemoveButtonListeners) this.rssRemoveButtonListeners = [];
+                this.rssRemoveButtonListeners.push({element: removeButton, type: 'click', listener: boundRemoveRssFeedUrl});
+
+                li.appendChild(removeButton);
+                listElement.appendChild(li);
+            });
+        }
+    }
+
+    addRssFeedUrl() {
+        const newUrlInput = document.getElementById('new-rss-feed-url');
+        if (!newUrlInput) return;
+        const newUrl = newUrlInput.value.trim();
+
+        if (newUrl === '') {
+            displayStatusMessage('rss-status-message', 'Please enter a URL.');
+            return;
+        }
+        if (!newUrl.startsWith('http://') && !newUrl.startsWith('https://')) {
+            displayStatusMessage('rss-status-message', 'Invalid URL format. Must start with http:// or https://');
+            return;
+        }
+
+        const urls = getSetting('rssFeedUrls', []);
+        if (urls.includes(newUrl)) {
+            displayStatusMessage('rss-status-message', 'This URL is already in the list.');
+            return;
+        }
+
+        urls.push(newUrl);
+        saveSetting('rssFeedUrls', urls);
+        this.renderRssFeedUrlsList();
+        newUrlInput.value = ''; // Clear input
+        displayStatusMessage('rss-status-message', 'RSS Feed URL added!');
+    }
+
+    removeRssFeedUrl(urlToRemove) {
+        let urls = getSetting('rssFeedUrls', []);
+        urls = urls.filter(url => url !== urlToRemove);
+        saveSetting('rssFeedUrls', urls);
+        this.renderRssFeedUrlsList(); // Re-render the list
+        displayStatusMessage('rss-status-message', 'RSS Feed URL removed!');
     }
 
     setupTabs() {
