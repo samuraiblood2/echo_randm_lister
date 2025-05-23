@@ -1,34 +1,38 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 	<head>
 		<title>Random Lister</title>
-
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link rel="stylesheet" type="text/css" href="style.css" />
-		<script type="text/javascript" src="random_list.js"> </script>
+		<script type="text/javascript" src="utils.js"></script>
+		<script type="text/javascript" src="marquee.js"></script>
+		<script type="text/javascript" src="random_list.js"></script>
 		<noscript>JavaScript needs to be enabled to run this program.</noscript>
-
-		<nav>
-			<ul class="navbar">
-				<li><a href="./index.html">Home</a></li>
-				<li><a id="active" href="./random_list.html">Random Lister</a></li>
-				<li><a href="./random_number.html">Random Number</a></li>
-				<li><a href="./coin_flipper.html">Coin Flipper</a></li>
-				<li><a href="./tarkov_roulette.html">Tarkov Roulette</a></li>
-			</ul>
-		</nav>
 	</head>
 
 	<body>
+		<div id="nav-placeholder"></div>
 		<center>
-			<br>Enter the different items to iterate over inside the textarea. Sepeate different items by new lines.<br><br>
+			<h1>Random Lister</h1>
+			Enter the different items to iterate over inside the textarea. Separate different items by new lines.<br><br>
 
 			<textarea id="items" rows="10" cols="125"></textarea> <br><br>
 
-			<from id="form">
+			<form id="form">
 				Amount: <input type="text" id="amount">
-				<input type="button" onclick="doSubmit()" value="Submit">
-			</from>
+				<button type="button" onclick="generateRandomList()">Submit</button>
+			</form>
 
 			<br><br><div class="result" id="result"></div>
 		</center>
+
+		<script>
+			document.addEventListener('DOMContentLoaded', function() {
+				loadMarquee(); // Creates the marquee structure
+				// marquee.js's own DOMContentLoaded will call updateMarqueeDisplay()
+				loadNavigationMenu('./random_list.html');
+			});
+		</script>
 	</body>
 </html>
