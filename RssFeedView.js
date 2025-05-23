@@ -82,7 +82,11 @@ class RssFeedView extends BaseView {
                     allRenderedItemsHTML += `<h2>Feed: ${sanitizedUrl}</h2>`; 
                     
                     if (feedData.error) {
-                        allRenderedItemsHTML += `<p class="error">Could not load items from this feed: ${feedData.error.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</p>`;
+                        let userFriendlyErrorMessage = `Could not load items from this feed: ${feedData.error.replace(/</g, "&lt;").replace(/>/g, "&gt;")}`;
+                        if (feedData.error.includes("CORS") || feedData.error.includes("Failed to fetch") || feedData.error.includes("network error")) {
+                            userFriendlyErrorMessage += `<br><small>Note: Many RSS feeds cannot be loaded directly by the browser due to security restrictions (CORS). If this feed is valid, it might be one of them. A server-side proxy is often required for such feeds.</small>`;
+                        }
+                        allRenderedItemsHTML += `<p class="error">${userFriendlyErrorMessage}</p>`;
                     } else if (feedData.items.length === 0) {
                         allRenderedItemsHTML += `<p>No items found in this feed.</p>`;
                     } else {
@@ -125,7 +129,11 @@ class RssFeedView extends BaseView {
 
 
             if (!hasContent && results.every(r => r.status === 'fulfilled' && r.value.error)) {
-                rssDisplayElement.innerHTML = '<p class="error">All configured RSS feeds failed to load or were empty.</p>';
+                let finalErrorMsg = '<p class="error">All configured RSS feeds failed to load or were empty.</p>';
+                if (results.some(r => r.status === 'fulfilled' && r.value.error && (r.value.error.toLowerCase().includes("cors") || r.value.error.toLowerCase().includes("failed to fetch") || r.value.error.toLowerCase().includes("network error")))) {
+                    finalErrorMsg += '<p class="error"><small>Some feeds may have failed due to browser security restrictions (CORS). Check individual feed errors for details.</small></p>';
+                }
+                rssDisplayElement.innerHTML = finalErrorMsg;
             } else if (!hasContent) {
                 rssDisplayElement.innerHTML = '<p>No items found in any of the configured RSS feeds.</p>';
             }

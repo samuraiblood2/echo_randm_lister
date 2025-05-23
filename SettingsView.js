@@ -11,10 +11,17 @@ class SettingsView extends BaseView {
             <div class="page-container"> <!-- Use existing .page-container class -->
                 <h1>Settings</h1>
                 <div id="settings-content-wrapper"> 
-                    <section id="rss-settings">
-                        <h2>RSS Feed Settings</h2>
-                        <div>
-                            <label for="new-rss-feed-url">Add RSS Feed URL:</label>
+                    <div class="settings-tabs" role="tablist">
+                        <button role="tab" aria-selected="true" aria-controls="rss-settings-panel" id="rss-tab">RSS Settings</button>
+                        <button role="tab" aria-selected="false" aria-controls="marquee-settings-panel" id="marquee-tab">Marquee Settings</button>
+                        <button role="tab" aria-selected="false" aria-controls="theme-settings-panel" id="theme-tab">Theme Settings</button>
+                    </div>
+
+                    <div id="rss-settings-panel" role="tabpanel" aria-labelledby="rss-tab">
+                        <section id="rss-settings">
+                            <h2>RSS Feed Settings</h2>
+                            <div>
+                                <label for="new-rss-feed-url">Add RSS Feed URL:</label>
                             <input type="text" id="new-rss-feed-url" name="new-rss-feed-url" size="50" placeholder="Enter feed URL">
                             <button id="add-new-rss-feed-url">Add Feed</button>
                         </div>
@@ -39,12 +46,13 @@ class SettingsView extends BaseView {
                         </div>
                         <button id="save-rss-display-options">Save Display Options</button>
                         <p id="rss-display-options-status-message" class="status-message"></p>
-                    </section>
-                    <hr>
-                    <section id="marquee-settings">
-                    <h2>Marquee Messages</h2>
-                    <div>
-                        <label for="new-marquee-message">New Message:</label>
+                        </section>
+                    </div>
+                    <div id="marquee-settings-panel" role="tabpanel" aria-labelledby="marquee-tab" class="hidden">
+                        <section id="marquee-settings">
+                        <h2>Marquee Messages</h2>
+                        <div>
+                            <label for="new-marquee-message">New Message:</label>
                         <input type="text" id="new-marquee-message" size="50">
                         <button id="add-marquee-message">Add Message</button>
                     </div>
@@ -54,12 +62,13 @@ class SettingsView extends BaseView {
                     </ul>
                     <button id="clear-marquee-messages">Clear All Marquee Messages</button>
                     <p id="marquee-status-message" class="status-message"></p>
-                </section>
-                <hr>
-                <section id="theme-settings">
-                    <h2>Theme Settings</h2>
-                    <div>
-                        <label for="theme-primary-bg-color">Primary Background Color:</label>
+                        </section>
+                    </div>
+                    <div id="theme-settings-panel" role="tabpanel" aria-labelledby="theme-tab" class="hidden">
+                        <section id="theme-settings">
+                            <h2>Theme Settings</h2>
+                            <div>
+                                <label for="theme-primary-bg-color">Primary Background Color:</label>
                         <input type="color" id="theme-primary-bg-color" data-css-var="--primary-bg-color">
                     </div>
                     <div>
@@ -79,6 +88,22 @@ class SettingsView extends BaseView {
                         <input type="color" id="theme-button-bg-color" data-css-var="--button-bg-color">
                     </div>
                     <div>
+                        <label for="theme-navbar-text-color">Navbar Link Text Color:</label>
+                        <input type="color" id="theme-navbar-text-color" data-css-var="--navbar-text-color">
+                    </div>
+                    <div>
+                        <label for="theme-navbar-text-hover-color">Navbar Link Hover Text Color:</label>
+                        <input type="color" id="theme-navbar-text-hover-color" data-css-var="--navbar-text-hover-color">
+                    </div>
+                    <div>
+                        <label for="theme-navbar-text-active-color">Navbar Link Active Text Color:</label>
+                        <input type="color" id="theme-navbar-text-active-color" data-css-var="--navbar-text-active-color">
+                    </div>
+                    <div>
+                        <label for="theme-navbar-border-active-color">Navbar Link Active Border Color:</label>
+                        <input type="color" id="theme-navbar-border-active-color" data-css-var="--navbar-border-active-color">
+                    </div>
+                    <div>
                         <label for="theme-font-family">Font Family:</label>
                         <select id="theme-font-family" data-css-var="--font-family-primary">
                             <option value="Arial, Helvetica, sans-serif">Sans Serif (Arial)</option>
@@ -94,12 +119,16 @@ class SettingsView extends BaseView {
                         <button id="save-theme-settings">Save Theme</button>
                         <button id="reset-default-theme">Reset to Default Theme</button>
                         <p id="theme-status-message" class="status-message"></p>
+                            </div>
+                        </section>
                     </div>
-                </section>
+                </div>
             </div>`;
     }
 
     postRender() {
+        this.setupTabs(); // Call new method to handle tab logic
+
         // This logic is moved from settings.js's loadSettingsPage()
         // Ensure settings.js (for getSetting/saveSetting, etc.) and marquee.js (for message functions) are loaded globally.
 
@@ -336,5 +365,34 @@ class SettingsView extends BaseView {
         saveSetting('rssFeedUrls', urls);
         this.renderRssFeedUrlsList(); // Re-render the list, which will also re-attach listeners
         displayStatusMessage('rss-status-message', 'RSS Feed URL removed!');
+    }
+
+    setupTabs() {
+        const tabButtons = document.querySelectorAll('.settings-tabs button[role="tab"]');
+        const tabPanels = document.querySelectorAll('div[role="tabpanel"]');
+
+        // Set initial state: first tab active, others hidden (already done in HTML for panels)
+        // Ensure first tab button has aria-selected="true" (already in HTML)
+        // Ensure corresponding panel is visible (remove 'hidden' class if present)
+        const initialActivePanelId = document.querySelector('.settings-tabs button[aria-selected="true"]').getAttribute('aria-controls');
+        document.getElementById(initialActivePanelId)?.classList.remove('hidden');
+
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Deactivate all tabs and hide all panels
+                tabButtons.forEach(btn => {
+                    btn.setAttribute('aria-selected', 'false');
+                });
+                tabPanels.forEach(panel => {
+                    panel.classList.add('hidden'); // Add 'hidden' class to hide
+                });
+
+                // Activate the clicked tab and show its panel
+                button.setAttribute('aria-selected', 'true');
+                const panelId = button.getAttribute('aria-controls');
+                document.getElementById(panelId)?.classList.remove('hidden'); // Remove 'hidden' class to show
+            });
+        });
     }
 }

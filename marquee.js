@@ -106,20 +106,6 @@ function updateMarqueeDisplay() {
     }
 }
 
-// Initialize marquee display when the DOM is ready.
-// This ensures that content from localStorage is loaded as soon as the marquee structure might be available.
-document.addEventListener('DOMContentLoaded', function() {
-    // updateMarqueeDisplay will be called.
-    // Note: loadMarquee() in utils.js also runs on DOMContentLoaded (called from HTMLs).
-    // The order of these listeners isn't strictly guaranteed but usually follows script inclusion order.
-    // If marquee.js is included before the inline script calling loadMarquee,
-    // updateMarqueeDisplay might run before the element exists.
-    // The console.warn in updateMarqueeDisplay handles this.
-    // A more robust solution might be to have loadMarquee call updateMarqueeDisplay after creating elements,
-    // or use a custom event. For now, this separate listener is per instructions.
-    updateMarqueeDisplay();
-});
-
 // Example usage (for testing in browser console):
 // addMarqueeMessage("This is a test message!");
 // addMarqueeMessage("Another exciting update coming soon.");

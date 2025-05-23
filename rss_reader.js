@@ -21,13 +21,13 @@ function fetchRSS(feedUrl, callback) {
             callback(null, xhr.responseText);
         } else {
             console.error('fetchRSS: Error - Status:', xhr.status, xhr.statusText);
-            callback(new Error('Failed to fetch RSS feed. Status: ' + xhr.status + ' ' + xhr.statusText), null);
+            callback(new Error('Failed to fetch RSS feed. Status: ' + xhr.status + ' ' + xhr.statusText + '. This might be due to CORS restrictions on the server or the feed URL being incorrect.'), null);
         }
     };
 
     xhr.onerror = function() {
         console.error('fetchRSS: Network Error.');
-        callback(new Error('Failed to fetch RSS feed due to network error.'), null);
+        callback(new Error('Failed to fetch RSS feed due to a network error. This could be a network issue or a CORS block. Check browser console for more details.'), null);
     };
 
     try {
