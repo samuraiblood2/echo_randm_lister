@@ -20,6 +20,9 @@
     <script type="text/javascript" src="RandomNumberView.js"></script>
     <script type="text/javascript" src="CoinFlipperView.js"></script>
     <script type="text/javascript" src="TarkovRouletteView.js"></script> <!-- Added TarkovRouletteView -->
+    <script type="text/javascript" src="DiceRollerView.js"></script> <!-- Added DiceRollerView -->
+    <script type="text/javascript" src="NumConverterView.js"></script> <!-- Added NumConverterView -->
+    <script type="text/javascript" src="TextCaseConverterView.js"></script> <!-- Added TextCaseConverterView -->
     <script type="text/javascript" src="App.js"></script>
     <!-- Specific View class files will be created later -->
     <script>
@@ -85,7 +88,10 @@
                 typeof RandomNumberView === 'function' &&
                 typeof CoinFlipperView === 'function' &&
                 typeof TarkovRouletteView === 'function' &&
-                typeof PlaceholderView === 'function') { // Added PlaceholderView check
+                typeof PlaceholderView === 'function' &&
+                typeof DiceRollerView === 'function' &&
+                typeof NumConverterView === 'function' &&
+                typeof TextCaseConverterView === 'function') { // Added TextCaseConverterView check
                 const appRoutes = {
                     '#home': RssFeedView,
                     '#settings': SettingsView,
@@ -93,11 +99,14 @@
                     '#tool-rss-reader': RssFeedView, // Reuses existing RssFeedView
                     '#tool-marquee-editor': PlaceholderView,
                     '#tool-random-string': PlaceholderView,
+                    '#tool-text-case-converter': TextCaseConverterView, // Added TextCaseConverterView route
                     '#tool-list-randomizer': RandomListerView, // Reuses existing RandomListerView
                     '#tool-json-formatter': PlaceholderView,
+                    '#tool-num-converter': NumConverterView, // Added NumConverterView route
                     '#tool-coin-flipper': CoinFlipperView, // Reuses existing CoinFlipperView
                     '#tool-random-number': RandomNumberView, // Reuses existing RandomNumberView
                     '#tool-tarkov-roulette': TarkovRouletteView, // Reuses existing TarkovRouletteView
+                    '#tool-dice-roller': DiceRollerView, // Added DiceRollerView route
                     // Old direct routes (optional, could be removed if menu is the only navigation)
                     // For now, keeping them might avoid breaking direct links if any existed.
                     // However, the task implies replacing them. I will remove them as per "Remove or replace the existing direct navigation links"
