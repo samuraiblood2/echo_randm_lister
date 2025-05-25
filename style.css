@@ -146,7 +146,7 @@ a:hover {
 }
 
 .navbar ul.dropdown-menu li a:hover {
-    background-color: var(--button-hover-bg-color); 
+    background-color: var(--secondary-bg-color); 
     /* color: var(--heading-text-color); Already set, or could be different for hover */
     border-bottom: none; 
 }
