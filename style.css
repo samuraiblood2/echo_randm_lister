@@ -99,7 +99,6 @@ a:hover {
 .navbar li.dropdown-category {
     position: relative; 
     display: inline-block; 
-    /* Debugging Styles */
 }
 
 .navbar li.dropdown-category > a {
@@ -113,15 +112,15 @@ a:hover {
     top: 100%; 
     left: 0;
     /* background-color: var(--navbar-bg-color); */
-    border: 1px solid var(--border-color-light); 
+    /* border: 1px solid var(--border-color-light); */ /* Removed as potentially a debug remnant */
     border-top: none; 
     padding: 0;
     margin: 0;
     list-style: none;
     min-width: 200px; 
+    background-color: var(--secondary-bg-color); /* Added as per instruction */
     z-index: 1001; 
-    box-shadow: 0px 3px 5px rgba(0,0,0,0.2); 
-    /* Debugging Styles */
+    /* box-shadow: 0px 3px 5px rgba(0,0,0,0.2); */ /* Removed as potentially a debug remnant */
 }
 
 .navbar li.dropdown-category:hover > ul.dropdown-menu {
@@ -130,7 +129,6 @@ a:hover {
 
 .navbar ul.dropdown-menu li {
     display: block; /* Or list-item */
-    /* Debugging Styles */
 }
 
 .navbar ul.dropdown-menu li a {
@@ -141,16 +139,16 @@ a:hover {
     text-decoration: none;
     border-bottom: none; 
     /* font-size: calc(var(--base-font-size) * 0.95);  */
-    text-align: left; /* This !important might be needed depending on specificity */
+    text-align: left; 
 
     /* Debugging Styles */
-    padding: 10px 15px; /* Force padding */
+    /* padding: 10px 15px; /* Force padding */ /* Removed as per instruction */
 }
 
 .navbar ul.dropdown-menu li a:hover {
-    background-color: var(--button-hover-bg-color) !important; 
+    background-color: var(--button-hover-bg-color); 
     /* color: var(--heading-text-color); Already set, or could be different for hover */
-    border-bottom: none !important; 
+    border-bottom: none; 
 }
 /* End Dropdown Menu Styling */
 
