@@ -61,7 +61,7 @@ a:hover {
 /* Navigation Bar */
 .navbar {
 	text-align: center;
-	overflow: hidden;
+	overflow: visible;
 	background-color: var(--navbar-bg-color);
 	padding: 10px 0;
 }
